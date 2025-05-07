@@ -62,11 +62,12 @@
           flat
         >
           <v-toolbar-title class="text-body-2">
-            {{obj.question}}
+            вопрос №{{ index+1 }}
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <p>{{ obj }}</p>
+          {{obj.question}}
+          <!-- <p>{{ obj }}</p> -->
           <p>correct answer: {{ questions_ans_list[index] }}</p> 
         </v-card-text>
 
