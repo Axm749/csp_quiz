@@ -70,39 +70,33 @@
           <p>correct answer: {{ questions_ans_list[index] }}</p> 
         </v-card-text>
 
-        <v-card-actions>
-
-
-          
-          <!-- <v-col>
+        <v-card-actions>        
+          <v-col>
             <v-row>
               <v-col>
                 <v-btn block>
-                  answer option 1
+                  0- {{ obj.answer[0] }}
                 </v-btn>
               </v-col>
               <v-col>
                 <v-btn block>
-                  answer option 2
+                  1- {{ obj.answer[1] }}
                 </v-btn>
               </v-col>
             </v-row>
-          
-          
-
             <v-row>
               <v-col>
                 <v-btn block>
-                  answer option 3
+                  2- {{ obj.answer[2] }}
                 </v-btn>
               </v-col>
               <v-col>
                 <v-btn block>
-                  answer option 4
+                  3- {{ obj.answer[3] }}
                 </v-btn>
               </v-col>
             </v-row>
-          </v-col> -->
+          </v-col>
         </v-card-actions>
 
         </v-card>
@@ -146,8 +140,8 @@
         {
           id: 1,
           question: 'idk, guess',
-          answer: 'correct_idea',
-          alt_answers: [
+          answer: [
+            'correct_idea',
             'incorrect_1',
             'incorrect_2',
             'incorrect_3'
@@ -156,22 +150,22 @@
         {
           id: 2,
           question: 'idk, guess2',
-          answer: 'correct_idea',
-          alt_answers: [
+          answer: [
+            'correct_idea',
             'incorrect_1',
             'incorrect_2',
             'incorrect_3'
-          ]
+          ],
         },
         {
           id: 3,
           question: 'idk, guess3',
-          answer: 'correct_idea',
-          alt_answers: [
+          answer: [
+            'correct_idea',
             'incorrect_1',
             'incorrect_2',
             'incorrect_3'
-          ]
+          ],
         }
       ],
       correct_count: 1,
@@ -285,17 +279,42 @@
             {
               id: i,
               question: `idk, guess${i}`,
-              answer: 'correct_idea',
-              alt_answers: [
-                'incorrect_1',
-                'incorrect_2',
-                'incorrect_3'
-              ]
+              answer: [
+                `correct_idea ${i}`,
+                `incorrect_1 ${i}`,
+                `incorrect_2 ${i}`,
+                `incorrect_3 ${i}`
+              ],
             }
           )
           i++
         }
       },
+
+      shuffle_answers(){
+        // Прохожусь по каждому вопросу с соответствующим значением правильного ответа
+        // Изначально правильный ответ всегда в первой ячейке массива
+        // Подходя к ячейке меняю местами первую ячейку (индекс ноль) с ячейкой, 
+        // на которой будет правильный ответ
+        //
+        // на этом по сути и всё
+        for(var i=0; i<this.questions_final_list.length; i++){
+
+          var current_question = this.questions_final_list[i].answer
+          var current_ans_position = this.questions_ans_list[i]
+          
+          console.log(current_question, current_ans_position, i)
+          if (current_ans_position != 0){
+            console.log('ans position', current_ans_position, '!= 0 ... swapping')
+            var temp = current_question[0]
+            current_question[0] = current_question[current_ans_position]
+            current_question[current_ans_position] = temp
+            this.questions_final_list[i].answer = current_question 
+          } else {
+            console.log('ans position', current_ans_position, '== 0')
+          }
+        }
+      }
 
 
 
@@ -305,6 +324,7 @@
       this.generate_questions()
       this.get_questions(rand_arr)
       this.get_question_answers(rand_arr)
+      this.shuffle_answers()
     }
   }
 </script>
