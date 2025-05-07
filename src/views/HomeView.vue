@@ -49,73 +49,80 @@
     </div>
     <v-container>
       <div class="auth" v-if="authorizing">
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="group"
-              label="Группа"
-              outlined
-            />
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="user_name"
-              label="Имя"
-              outlined
-            />
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="user_surname"
-              label="Фамилия"
-              outlined
-            />
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="optional_digit"
-              label="Вариант (опционально)"
-              outlined
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-spacer/>
-          <v-btn
-          v-if="!!group && !!user_name && !!user_surname"
-          @click="authorizing=false"
-          >
-            Начать тестирование
-          </v-btn>
+          
+        <v-col>
 
-          <v-btn
-          v-if="!(!!group && !!user_name && !!user_surname)"
+            <v-row>
+              <v-text-field
+                v-model="group"
+                label="Группа"
+                outlined
+              />
+            </v-row>
+            <v-row>
+              <v-text-field
+                v-model="user_name"
+                label="Имя"
+                outlined
+              />
+            </v-row>
+            <v-row>
+              <v-text-field
+                v-model="user_surname"
+                label="Фамилия"
+                outlined
+              />
+            </v-row>
+            <v-row>
+              <v-text-field
+                v-model="optional_digit"
+                label="Число вопросов в варианте"
+                outlined
+              />
+            </v-row>
+        </v-col>
+        
+          
+        
+        <v-btn
+          v-if="!!group && !!user_name && !!user_surname && optional_digit>=1"
+          @click="authorizing=false"
+          block
+          color="primary"
+        >
+          Начать тестирование
+        </v-btn>
+
+        <v-btn
+          v-if="!(!!group && !!user_name && !!user_surname && optional_digit>=1)"
           @click="authorizing=false"
           disabled
-          >
-            Начать тестирование
-          </v-btn>
-
-          <v-spacer/>
-        </v-row>
+          block
+        >
+          Начать тестирование
+        </v-btn>
+        
       </div>
-      <div class="revoke" v-if="!authorizing">
+      <!-- <div class="revoke" v-if="!authorizing">
         <v-row>
-          <v-spacer/>
+
           <v-col>
             <v-btn
             @click="authorizing=true"
+            block
+            color="primary"
             >
               отменить тестирование
             </v-btn>
           </v-col>
-          
-          <v-spacer/>
+
         </v-row>
-      </div>
+      </div> -->
       
 
-      <main_quiz
+      
+    </v-container>
+    <main_quiz
         v-if="!authorizing"
         :user="{
           'group':group,
@@ -124,9 +131,6 @@
           'optional_digit':optional_digit
         }"
       />
-    </v-container>
-    
-    
   </div>
   
   
@@ -145,10 +149,10 @@
       authorizing: true,
       debug:true,
       group: 'ТСТ-442',
-      user_name: 'Михайлов',
-      user_surname: 'Александр',
+      user_name: 'Александр',
+      user_surname: 'Михайлов',
       optional_digit: 10
-    }),
+    })
   }
 </script>
 <style>
