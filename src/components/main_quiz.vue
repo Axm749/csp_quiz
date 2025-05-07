@@ -215,10 +215,10 @@
         var r_num_array_length = r_num_array.length
         var answer = []
         for(var i=0; i<r_num_array_length; i++){
-          console.log(`${r_num_array[i]} % ${range} = ${r_num_array[i] % range}`)
+          // console.log(`${r_num_array[i]} % ${range} = ${r_num_array[i] % range}`)
           answer.push(r_num_array[i] % range)
         }
-        console.log(answer)
+        // console.log(answer)
         this.questions_ans_list = answer
         return answer
       },
@@ -241,9 +241,9 @@
         for (var j=0; j<this.questions_list.length;j++){
           options_list.push(j)
         }
-        console.log('options_list', options_list)
+        // console.log('options_list', options_list)
         this.quiz_list = options_list
-        console.log('this.questions_list.length', this.questions_list.length)
+        // console.log('this.questions_list.length', this.questions_list.length)
         this.shuffle_arr(options_list, r_num_array)
         // this.shuffle_arr(this.quiz_list, r_num_array)
         this.questions_num_list = options_list
@@ -253,7 +253,7 @@
             this.questions_list[this.questions_num_list[i]]
             )
         }
-        console.log(this.questions_final_list)
+        // console.log(this.questions_final_list)
 
       },
 
@@ -279,7 +279,7 @@
           this.questions_list.push(
             {
               id: i,
-              question: `idk, guess${i}`,
+              question: `question №${i}, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
               answer: [
                 `correct_idea ${i}`,
                 `incorrect_1 ${i}`,
@@ -304,15 +304,15 @@
           var current_question = this.questions_final_list[i].answer
           var current_ans_position = this.questions_ans_list[i]
           
-          console.log(current_question, current_ans_position, i)
+          // console.log(current_question, current_ans_position, i)
           if (current_ans_position != 0){
-            console.log('ans position', current_ans_position, '!= 0 ... swapping')
+            // console.log('ans position', current_ans_position, '!= 0 ... swapping')
             var temp = current_question[0]
             current_question[0] = current_question[current_ans_position]
             current_question[current_ans_position] = temp
             this.questions_final_list[i].answer = current_question 
           } else {
-            console.log('ans position', current_ans_position, '== 0')
+            // console.log('ans position', current_ans_position, '== 0')
           }
         }
       }
