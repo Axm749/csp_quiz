@@ -7,10 +7,9 @@
     >
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
           class="shrink mr-2"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="./assets/logo.png"
           transition="scale-transition"
           width="40"
         />
@@ -23,7 +22,7 @@
         @click="$vuetify.theme.dark = !$vuetify.theme.dark"
         text
       >
-        <span class="mr-2">Сменить тему</span>
+        <span class="mr-2">Изменить тему</span>
         <v-icon v-if="!$vuetify.theme.dark">mdi-moon-new</v-icon>
         <v-icon v-if="$vuetify.theme.dark">mdi-moon-full</v-icon>
       </v-btn>

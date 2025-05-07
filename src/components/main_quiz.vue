@@ -70,7 +70,8 @@
         <v-col>
           <v-row>
             <v-col>
-              <v-btn block
+              <v-btn block max-width="100%"
+              class="overflow-x-hidden"
               :dark="chosen_ans_list[index]===0"
               :color="chosen_ans_list[index]===0 ? 'answerSelected' : 'passive'"
               @click="check_answer(0, questions_ans_list[index], obj, index)">
@@ -78,7 +79,8 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn block 
+              <v-btn block max-width="100%"
+              class="overflow-x-hidden"
               :dark="chosen_ans_list[index]===1"
               :color="chosen_ans_list[index]===1 ? 'answerSelected' : 'passive'"
               @click="check_answer(1, questions_ans_list[index], obj, index)">
@@ -88,7 +90,8 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-btn block
+              <v-btn block max-width="100%"
+              class="overflow-x-hidden"
               :dark="chosen_ans_list[index]===2"
               :color="chosen_ans_list[index]===2 ? 'answerSelected' : 'passive'"
               @click="check_answer(2, questions_ans_list[index], obj, index)">
@@ -96,7 +99,8 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn block
+              <v-btn block max-width="100%" 
+              class="overflow-x-hidden"
               :dark="chosen_ans_list[index]===3"
               :color="chosen_ans_list[index]===3 ? 'answerSelected' : 'passive'"
               @click="check_answer(3, questions_ans_list[index], obj, index)">
@@ -126,53 +130,100 @@
         class="mt-3" 
         block disabled
         >завершить (не все вопросы отвечены)</v-btn>
+
+
+        <v-btn 
+        @click="finish_quiz()"
+        class="mt-3" 
+        block 
+        color="primary"
+        >завершить (debug)</v-btn>
     </div>
 
     <div class="finish" v-if="!quiz_state">
-      <h2>there will be an endscreen</h2>
 
 
       <v-card 
-          class="mt-3"
+        class="mt-3"
+        v-if="!quiz_state"
+      >
+        <v-img
+          height="100px"
+          :src="get_img(!$vuetify.theme.dark)"
         >
-        <v-toolbar
-          :color="evaluate_results(correct_count, user.optional_digit)"
-          dark
-          dense
-          flat
-        >
-          <v-toolbar-title class="text-body-2">
-            Результат
-          </v-toolbar-title>
-        </v-toolbar>
+          <v-app-bar
+            flat
+            color="rgba(0, 0, 0, 0)"
+          >
+            <v-toolbar-title class="text-h6 white--text pl-0">
+              Индивидуальные результаты викторины
+            </v-toolbar-title>
+          </v-app-bar>
+        </v-img>
         <v-card-text>
-          <p>Имя: {{ user.user_name }}</p>
-          <p>Фамилия: {{ user.user_surname }}</p>
-          <p>Группа: {{ user.group }}</p>
+          <v-row>
+            <v-col>
+              <v-simple-table class="text-h6 pl-0">
+                <template v-slot:default>
+                  <tbody>
+                    <tr>
+                      <td>Фамилия:</td>
+                      <td>{{ user.user_surname }}</td>
+                    </tr>
+                    <tr>
+                      <td>Имя:</td>
+                      <td>{{ user.user_name }}</td>
+                    </tr>
+                    <tr>
+                      <td>Группа:</td>
+                      <td>{{ user.group }}</td>
+                    </tr>
+                    <tr>
+                      <td>Оценка:</td>
+                      <td :style='`color: ${evaluate_results(correct_count, user.optional_digit)};`'>{{ mark }}</td>
+                    </tr>
+                    <tr>
+                      <td>Время написания:</td>
+                      <td>{{ user.group }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+
+
+              </v-simple-table>
+            </v-col>
+            <v-col class="text-center my-5">
+              <v-progress-circular
+                size="200"
+                width="30"
+                :value="(correct_count/user.optional_digit)*100"
+                :color="evaluate_results(correct_count, user.optional_digit)"
+              >
+              <v-chip>
+                {{ correct_count }}/{{user.optional_digit}}
+              </v-chip>
+                
+              </v-progress-circular>
+            </v-col>
+          </v-row>
+          
         </v-card-text>
 
-        <v-card-actions>        
-          <v-progress-circular
-            size="200"
-            width="30"
-            :value="(correct_count/user.optional_digit)*100"
-            :color="evaluate_results(correct_count, user.optional_digit)"
-          >
-            {{ correct_count }}/{{user.optional_digit}}
-          </v-progress-circular>
+        <v-card-actions>
+               
+          
         </v-card-actions>
-
-        </v-card>
+      </v-card>
     <!-- <div class="finish" v-if="quiz_state"> -->
       
-      <v-progress-circular
+      <!-- <v-progress-circular
         size="200"
         width="30"
         :value="(correct_count/user.optional_digit)*100"
         :color="evaluate_results(correct_count, user.optional_digit)"
       >
         {{ correct_count }}/{{user.optional_digit}}
-      </v-progress-circular>
+      </v-progress-circular> -->
       <!-- <p>{{ evaluate_results(correct_count, user.optional_digit) }}</p> -->
     </div>
   </v-container>
@@ -187,12 +238,13 @@
 
     data: () => ({
       quiz_state: true,
-      debug: true,
+      debug: false,
       jtr: 0,
       questions_num_list: [],
       questions_ans_list: [],
       full_answers: [],
       chosen_ans_list: [],
+      mark: 'Неудовлетворительно',
       
       questions_list: 
       [
@@ -250,8 +302,8 @@
           id: 6,
           question: 'фНЧ нужен для ...',
           answer: [
-            'пропускания токов нижних частот',
-            'задерживания токов нижних частот',
+            'пропускания нижних частот',
+            'задерживания нижних частот',
             'создания колебаний нижних частот',
             'другое'
           ],
@@ -557,26 +609,36 @@
 
         console.log(ratio, 'correct/total=', correct/total)
         if (this.between(ratio, 0, acceptable_mark_req)){
-          console.log('red')  
+          console.log('red') 
+          this.mark='Неудовлетворительно' 
           return 'red'
         }
         if (this.between(ratio, acceptable_mark_req, good_mark_req)){
           console.log('orange')  
+          this.mark='Удовлетворительно'
           return 'orange'
         }
         if (this.between(ratio, good_mark_req, excelent_mark_req)){
-          console.log('yellow')  
-          return 'yellow'
+          console.log('green')  
+          this.mark='Хорошо'
+          return 'green'
         }
-        console.log('green') 
-        return 'green'
-        
+        console.log('blue') 
+        this.mark='Отлично'
+        return 'blue'
       },
       // функция округляет в лучшую для студента сторону
       // [min, max)
       between(x, min, max){
         return x >= min && x < max
-      }
+      },
+      get_img(input){
+        if(input){
+          return 'https://i.pinimg.com/originals/ea/94/f1/ea94f17cce722d9bc1b8643a0277da66.jpg'
+        } else return 'https://cdn.culture.ru/images/56e7c169-0ced-5fa8-8764-860334000db0'
+      },
+      
+
 
 
 
