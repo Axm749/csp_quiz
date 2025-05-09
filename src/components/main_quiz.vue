@@ -21,13 +21,13 @@
           </p>
         </v-col>
         <v-divider vertical/>
-        <v-col>
+        <v-col cols="4">
           <p> 
             qnl: {{ questions_num_list }}
           </p>
         </v-col>
         <v-divider vertical/>
-        <v-col>
+        <v-col cols="4">
           <p> 
             qal: {{ questions_ans_list }}
           </p>
@@ -63,10 +63,10 @@
       <v-card-text>
         {{obj.question}}
         <!-- <p>{{ obj }}</p> -->
-        <p>correct answer: {{ questions_ans_list[index] }}</p> 
+        <p v-if="debug">correct answer: {{ questions_ans_list[index]+1 }}</p> 
       </v-card-text>
 
-      <v-card-actions>        
+      <v-card-actions>   
         <v-col>
           <v-row>
             <v-col>
@@ -129,10 +129,11 @@
         v-if="!finish_req()"
         class="mt-3" 
         block disabled
-        >завершить (не все вопросы отвечены)</v-btn>
+        >ответьте на все вопросы ({{ current_answers }}/{{ user.optional_digit }})</v-btn>
 
 
         <v-btn 
+        v-if="debug"
         @click="finish_quiz()"
         class="mt-3" 
         block 
@@ -230,6 +231,7 @@
 </template>
 
 <script>
+import questions from '../data/questions.js';
   export default {
     name: 'main_quiz',
     props:{
@@ -238,180 +240,16 @@
 
     data: () => ({
       quiz_state: true,
-      debug: false,
+      debug: true,
       jtr: 0,
       questions_num_list: [],
       questions_ans_list: [],
       full_answers: [],
       chosen_ans_list: [],
       mark: 'Неудовлетворительно',
-      
-      questions_list: 
-      [
-        {
-          id: 1,
-          question: 'Бесплатный вопрос, просто не ошибись. Хотя я знаю, что тебе он никогда не попадётся',
-          answer: [
-            'Верный ответ',
-            'Не выбирай 1',
-            'Не выбирай 2',
-            'Не выбирай 3'
-          ],
-        },
-        {
-          id: 2,
-          question: 'Что из перечисленного входит в иерархию цифровых сетей европейского стандарта?',
-          answer: [
-            'E0, E1, E2, ...',
-            'PDH, SDH, ...',
-            'T0, T1, T2, ...',
-            'Euro5, Euro6, ...'
-          ],
-        },
-        {
-          id: 3,
-          question: 'Что из перечисленного входит в иерархию цифровых сетей американского стандарта?',
-          answer: [
-            'T0, T1, T2, ...',
-            'E0, E1, E2, ...',
-            'PDH, SDH, ...',
-            'U1, U2, ...'
-          ],
-        },
-        {
-          id: 4,
-          question: 'Кодеки речевых сигналов – кодеки ... типа, результатом ... является токи АИМ сигнала и эталонные токи, вырабатываемые генератором эталонных токов.',
-          answer: [
-            'взвешивающего ... взвешивания',
-            'E0, E1, E2, ...',
-            'PDH, SDH, ...',
-            'U1, U2, ...'
-          ],
-        },
-        {
-          id: 5,
-          question: 'Кодеки речевых сигналов – кодеки взвешивающего типа, результатом взвешивания является токи ... сигнала и эталонные токи, вырабатываемые генератором эталонных токов.',
-          answer: [
-            'АИМ',
-            'ШИМ',
-            'ФМ',
-            'ЧМ'
-          ],
-        },
-        {
-          id: 6,
-          question: 'фНЧ нужен для ...',
-          answer: [
-            'пропускания нижних частот',
-            'задерживания нижних частот',
-            'создания колебаний нижних частот',
-            'другое'
-          ],
-        },
-        {
-          id: 7,
-          question: 'фВЧ нужен для ...',
-          answer: [
-            'пропускания токов верхних частот',
-            'задерживания токов верхних частот',
-            'создания колебаний верхних частот',
-            'другое'
-          ],
-        },
+      current_answers: 0,
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-      ],
+      questions_list: questions,
       correct_count: 1,
       quiz_list: [],
       questions_final_list: []
@@ -446,7 +284,7 @@
         var arr = this.cyrb128(str)
         // console.log(arr)
         // var max_len_log = this.user.optional_digit
-        for(var j=0; j<8; j++){
+        for(var j=0; j<49; j++){
           for(var i=0; i<4; i++){
             arr.push(this.cyrb128(arr[j])[i])
           }
@@ -466,7 +304,7 @@
         return answer
       },
 
-      // получаю номера вопросов
+      // получаю номера вопросов, которые будут в варианте
       get_questions(r_num_array){
         // что я делаю:
         // 1) создаю массив номеров доступных вопросов (они по порядку)
@@ -504,8 +342,8 @@
         }
       },
 
-
-      generate_questions(){
+      // 
+      generate_questions_to_list(){
         var i = this.questions_list.length
         var rand_array = this.get_rand(this.get_seed(this.user))
         while(i<rand_array.length)
@@ -582,7 +420,9 @@
         if (ans_count==this.user.optional_digit){
           // console.log('ans_count==this.user.optional_digit')
           return true
-        } else {return false}
+        } else {
+          this.current_answers = ans_count
+          return false}
         // console.log('no problem, everything was answered')
         // return true
       },
@@ -645,7 +485,7 @@
     },
     mounted(){
       var rand_arr = this.get_rand(this.get_seed(this.user))
-      this.generate_questions()
+      // this.generate_questions_to_list()
       this.get_questions(rand_arr)
       this.get_question_answers(rand_arr)
       this.shuffle_answers()
