@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app mb-12">
     <div class="debug" v-if="debug">
       <v-row>
 
@@ -47,10 +47,10 @@
 
       </v-row>
     </div>
-    <v-container>
-      <v-card class="auth" v-if="authorizing">
+    <v-container v-if="authorizing">
+      <v-card class="auth" >
         <v-img
-          height="100px"
+          height="80px"
           :src="get_img(!$vuetify.theme.dark)"
         >
           <v-app-bar
@@ -58,18 +58,26 @@
             color="rgba(0, 0, 0, 0)"
           >
             <v-toolbar-title class="text-h6 white--text pl-0">
-              <v-icon dark class="mr-2">mdi-application-edit-outline</v-icon>
+              <!-- <v-icon dark class="mr-2">mdi-application-edit-outline</v-icon> -->
               Викторина
             </v-toolbar-title>
           </v-app-bar>
         </v-img>
-        <v-card-text>
-          <p class="text-justify">
+        <v-card-text class="text-justify">
+          <p>
             Вам будут представлены вопросы по 
             пройденным на 3 и 4 курсах темах цифровых систем передачи. 
-            Всё, что было в зачетах предыдущих семестров и среди вопросов на грядущий экзамен.
-            Перед тем как перейти к вопросам, настоятельно рекомендуется ввести данные участника.
-            Количество вопросов регулируется организаторами или преподавателем.
+          </p>
+
+          <p>
+            Ваша задача — ответить на максимальное число вопросов за минимальное время.
+            На все вопросы отвечать необязательно, нужно ответить на как можно большее число.
+            Итог будет подводиться по итоговому количеству очков. 
+            Они зависят как от числа правильных ответов, так и от времени завершения ответов. 
+            Имеет смысл заканчивать досрочно, нежели потратить много времени на вопросы, в которых не уверены.
+            <!-- Если не знаете ответа на вопрос, лучше его пропустить 
+            и набрать очки на следующих, чтобы не терять время.
+            Число ответов имеет главную роль в подсчёте очков, но и время способно умножить итоговый счёт. -->
           </p>
           
           <v-col class="mt-5">
@@ -104,9 +112,9 @@
             <v-row>
               <v-slider
                 v-model="timer"
-                :label="`время в минутах: ${timer}`"
+                :label="`время: ${timer} минут`"
                 min="1"
-                max="10"
+                max="9"
               />
             </v-row>
             <v-row>
@@ -141,7 +149,6 @@
       </v-card>
       <div class="revoke" v-if="!authorizing && debug">
         <v-row>
-
           <v-col>
             <v-btn
             @click="authorizing=true"
@@ -151,13 +158,13 @@
               отменить тестирование
             </v-btn>
           </v-col>
-
         </v-row>
       </div>
       
 
       
     </v-container>
+    
     <main_quiz
         v-if="!authorizing"
         :user="{
@@ -184,7 +191,7 @@
     },
     data: () => ({
       authorizing: true,
-      debug: true,
+      debug: false,
       group: 'ТСТ-442',
       user_name: 'Тестовый',
       user_surname: 'Вариант',

@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    
-    <!-- <p>
-      {{ timerCount }} //////////////////////// {{ timerEnabled }}
-    </p> -->
+
     <div class="debug" v-if="debug">
       <v-row>
         <v-col>
@@ -42,6 +39,45 @@
     </div>
     <p style="display: none;">just to render {{ jtr }}</p>
     <div class="quiz" v-if="quiz_state">
+
+      <v-card>
+        <v-img
+            height="80px"
+            :src="get_img(!$vuetify.theme.dark)"
+          >
+            <v-app-bar
+              flat
+              color="rgba(0, 0, 0, 0)"
+            >
+            </v-app-bar>
+          </v-img>
+          <v-card-title>
+            Данные участника: 
+          </v-card-title>
+          <v-card-text>
+            <v-simple-table class="text-h6 pl-0">
+                  <template v-slot:default>
+                    <tbody>
+                      <tr>
+                        <td>Фамилия:</td>
+                        <td>{{ user.user_surname }}</td>
+                      </tr>
+                      <tr>
+                        <td>Имя:</td>
+                        <td>{{ user.user_name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Группа:</td>
+                        <td>{{ user.group }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+          </v-card-text>
+      </v-card>
+
+
+
       <!-- <p>quiz_list: {{ quiz_list }}</p> -->
       <!-- <p>количество вопросов в архиве: {{ questions_list.length }}</p> -->   
       <!-- <p>список номеров вопроса: {{ questions_num_list }}</p> -->
@@ -69,9 +105,68 @@
         {{obj.question}}
         <!-- <p>{{ obj }}</p> -->
         <p v-if="debug">correct answer: {{ questions_ans_list[index]+1 }}</p> 
+        <p v-if="debug">chosen answer: {{ (chosen_ans_list[index]+1)<5 ? (chosen_ans_list[index]+1) : 'none' }}</p> 
       </v-card-text>
 
       <v-card-actions>   
+        <!-- {{ chosen_ans_list[index] }} -->
+        <!-- <v-btn-toggle
+          v-model="chosen_ans_list[index]"
+          width="100%"
+        >
+          <v-container width="100%">
+            <v-row>
+              <v-col>
+                <v-row>
+                  <v-btn
+                  block width="100%"
+                  class="overflow-x-hidden shaded mt-2 px-2"
+                  :dark="chosen_ans_list[index]===0"
+                  :color="chosen_ans_list[index]===0 ? 'answerSelected' : 'passive'"
+                  >
+                    {{ obj.answer[0] }}
+                  </v-btn>
+                </v-row>
+                <v-row>
+                  <v-btn
+                  block width="100%"
+                  class="overflow-x-hidden shaded mt-2 px-2"
+                  :dark="chosen_ans_list[index]===1"
+                  :color="chosen_ans_list[index]===1 ? 'answerSelected' : 'passive'"
+                  >
+                    {{ obj.answer[1] }}
+                  </v-btn>
+                </v-row>
+              </v-col>
+              <v-col>
+                <v-row>
+                  <v-btn
+                  block width="100%"
+                  class="overflow-x-hidden shaded mt-2 px-2"
+                  :dark="chosen_ans_list[index]===2"
+                  :color="chosen_ans_list[index]===2 ? 'answerSelected' : 'passive'"
+                  >
+                    {{ obj.answer[2] }}
+                  </v-btn>
+                </v-row>
+                <v-row>
+                  <v-btn
+                  block width="100%"
+                  class="overflow-x-hidden shaded mt-2 px-2"
+                  :dark="chosen_ans_list[index]===3"
+                  :color="chosen_ans_list[index]===3 ? 'answerSelected' : 'passive'"
+                  >
+                    {{ obj.answer[3] }}
+                  </v-btn>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-container>
+          
+          
+        </v-btn-toggle> -->
+        
+        
         <v-col>
           <v-row>
             <v-col>
@@ -111,9 +206,12 @@
               @click="check_answer(3, questions_ans_list[index], obj, index)">
                 {{ obj.answer[3] }}
               </v-btn>
+              
             </v-col>
           </v-row>
-        </v-col>
+        </v-col> 
+       
+      
       </v-card-actions>
 
       </v-card>
@@ -134,30 +232,18 @@
         v-if="!finish_req()"
         class="mt-3" 
         block disabled
-        >ответьте на все вопросы ({{ current_answers }}/{{ user.optional_digit }})</v-btn> -->
-
-
-        
+        >ответьте на все вопросы ({{ current_answers }}/{{ user.optional_digit }})</v-btn>
+         -->    
     </div>
 
-    <v-container class="mt-7" >
-      <v-btn 
-        v-if="quiz_state"
-        style="position: fixed; bottom: 0;"
-        @click="finish_quiz()"
-        class="ma-3 shaded" 
-        color="primary"
-      >завершить (осталось {{ (timerCount/2).toFixed()  }} c)</v-btn>
-
-    </v-container>
-    
-
-
-
+    <v-btn 
+      v-if="quiz_state"
+      @click="finish_quiz()"
+      class="shaded bottom-button" 
+      color="primary"
+    >завершить (осталось {{ (timerCount/120).toFixed()  }} мин)</v-btn>
 
     <div class="finish" v-if="!quiz_state">
-
-
       <v-card 
         class="mt-3"
         v-if="!quiz_state"
@@ -218,29 +304,91 @@
                     </tr> -->
                   </tbody>
                 </template>
-
-
               </v-simple-table>
             </v-col>
+          </v-row>
+          <v-row>
             <v-col class="text-center my-5">
+              <p>Ответов:</p>
               <v-progress-circular
                 rotate="270"
-                size="200"
-                width="30"
+                size="100"
+                width="15"
                 :value="(correct_count/user.optional_digit)*100"
                 :color="evaluate_results(correct_count, user.optional_digit)"
               >
-              <v-chip v-if="correct_count != user.optional_digit">
+              <v-chip>
                 {{ correct_count }}/{{user.optional_digit}}
-              </v-chip>
-              <v-chip v-if="correct_count == user.optional_digit">
-                ты походу жульничаешь... {{ correct_count }}/{{user.optional_digit}}
               </v-chip>
                 
               </v-progress-circular>
             </v-col>
+
+            <v-col class="text-center my-5">
+              <p>Очков: 
+                <!-- {{ (
+                  calcScore(correct_count, user.optional_digit, (timerCount/2))
+                  /calcScore(user.optional_digit, user.optional_digit, timerMax)
+                  )*100 }} -->
+              </p>
+              <v-progress-circular
+                rotate="270"
+                size="100"
+                width="15"
+                :value="
+                  calcScore(correct_count, user.optional_digit, (timerCount/2))
+                  /calcScore(user.optional_digit, user.optional_digit, timerMax)
+                  *100"
+                :color="evaluate_results(correct_count, user.optional_digit)"
+              >
+              <v-chip>
+                <!-- {{ correct_count }}/{{user.optional_digit}} -->
+                  {{ getScore(
+                              correct_count,  
+                              user.optional_digit, 
+                              (timerCount/2).toFixed(), 
+                              timerMax 
+                            )  }}
+              </v-chip>
+              
+                
+              </v-progress-circular>
+            </v-col>
           </v-row>
-          
+
+
+          <v-row v-if="debug">
+            <v-simple-table dense width="100%">
+              <template v-slot:default>
+                  <tbody>
+                    <tr v-for="(obj, index) of chosen_ans_list.slice(0, user.optional_digit)" :key="index+1">
+                      <td>
+                          {{ chosen_ans_list[index] }}
+                      </td>
+                      <td>
+                          {{ questions_ans_list[index] }}
+                      </td>
+                      <td>
+                          <v-chip
+                          :color="chosen_ans_list[index]===questions_ans_list[index] ? 'green' : 'red'"
+                          >
+                            <v-icon
+                              v-if="chosen_ans_list[index]===questions_ans_list[index]"
+                            >
+                              mdi-check
+                            </v-icon>
+                            <v-icon
+                              v-if="chosen_ans_list[index]!=questions_ans_list[index]"
+                            >
+                              mdi-close
+                            </v-icon>
+                          </v-chip>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+            </v-simple-table>
+          </v-row>          
         </v-card-text>
 
         <v-card-actions>
@@ -262,7 +410,7 @@ import questions from '../data/questions.js';
 
     data: () => ({
       quiz_state: true,
-      debug: true,
+      debug: false,
       jtr: 0,
       questions_num_list: [],
       questions_ans_list: [],
@@ -432,14 +580,7 @@ import questions from '../data/questions.js';
        * @param index - положение вопроса в списке
        */
       check_answer(x, y, obj, index){
-        // if(x==y){
-        //   console.log('correct answer')
-        // } else {
-        //   console.log('wrong answer')
-        // }
-        // console.log(this.chosen_ans_list[index], '?', x)
         this.chosen_ans_list[index]=x
-        // console.log(this.chosen_ans_list[index], '?', x)
         this.jtr++
       },
 
@@ -458,6 +599,10 @@ import questions from '../data/questions.js';
           return false}
         // console.log('no problem, everything was answered')
         // return true
+      },
+      get_c_a_count(){
+        this.finish_req()
+        return this.current_answers
       },
       finish_quiz(){
         this.quiz_state=false
@@ -547,7 +692,6 @@ import questions from '../data/questions.js';
           if(minutes > 0){
             return `${minutes} м, ${seconds} с`
           }
-          
         }  
         return `${seconds} с`      
       },
@@ -565,7 +709,11 @@ import questions from '../data/questions.js';
         return `${score}/${maxScore}`
       },
       calcScore(correct, all, timeLeft){
-        return correct * 10 * (1 + correct + all + ( (timeLeft / 60) * ( 5 * correct/all ) ) ).toFixed()
+        console.log('correct',correct, 'all', all, 'timeLeft', timeLeft)
+        var answer =  correct * 10 * (1 + correct + all + ( (timeLeft / 60) * ( 5 * correct/all ) ) )
+        console.log(answer)
+        return answer.toFixed()
+
       }
 
 
@@ -624,6 +772,12 @@ import questions from '../data/questions.js';
 }
 .shaded{
   background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.055));
+}
+.bottom-button{
+  position: fixed; 
+  bottom:   10px; 
+  left:     10%;
+  width:    80%;
 }
 </style>
 
