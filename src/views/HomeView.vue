@@ -102,6 +102,14 @@
               />
             </v-row>
             <v-row>
+              <v-slider
+                v-model="timer"
+                :label="`время в минутах: ${timer}`"
+                min="1"
+                max="10"
+              />
+            </v-row>
+            <v-row>
               <v-btn
                 v-if="!!group && !!user_name && !!user_surname && optional_digit>=1"
                 @click="authorizing=false"
@@ -131,7 +139,7 @@
        
         
       </v-card>
-      <!-- <div class="revoke" v-if="!authorizing">
+      <div class="revoke" v-if="!authorizing && debug">
         <v-row>
 
           <v-col>
@@ -145,7 +153,7 @@
           </v-col>
 
         </v-row>
-      </div> -->
+      </div>
       
 
       
@@ -156,7 +164,8 @@
           'group':group,
           'user_name':user_name,
           'user_surname':user_surname,
-          'optional_digit':optional_digit
+          'optional_digit':optional_digit,
+          'timer': timer
         }"
       />
   </div>
@@ -175,11 +184,12 @@
     },
     data: () => ({
       authorizing: true,
-      debug: false,
+      debug: true,
       group: 'ТСТ-442',
       user_name: 'Тестовый',
       user_surname: 'Вариант',
-      optional_digit: 10
+      optional_digit: 50,
+      timer: 10
     }),
     methods:{
       get_img(input){

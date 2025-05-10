@@ -13,19 +13,38 @@
       </v-btn>
       <v-spacer></v-spacer>
 
-      <v-menu offset-y>
+      <v-dialog 
+        transition="slide-x-transition"  
+        max-height="80%" 
+        v-model="dialog"
+      >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            dark
-            v-bind="attrs"
-            v-on="on"
-            icon
+              dark
+              v-bind="attrs"
+              v-on="on"
+              icon
             >
             <v-icon>mdi-information-outline</v-icon>
           </v-btn>
         </template>
+        <v-toolbar
+          dark
+          color="primary"
+        >
+          
+          <v-toolbar-title>О странице</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            dark
+            @click="dialog = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
         <creditsCard/>
-      </v-menu>
+      </v-dialog>
 
 
       <!-- <v-btn class="d-flex align-center"
@@ -60,6 +79,7 @@ export default {
 
   data: () => ({
     //
+    dialog: false
   }),
 };
 </script>

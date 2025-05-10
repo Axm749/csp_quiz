@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    
+    <!-- <p>
+      {{ timerCount }} //////////////////////// {{ timerEnabled }}
+    </p> -->
     <div class="debug" v-if="debug">
       <v-row>
         <v-col>
@@ -55,8 +59,9 @@
         dark
         dense
         flat
+        class="shaded"
       >
-        <v-toolbar-title class="text-body-2">
+        <v-toolbar-title class="text-body-2 ">
           вопрос №{{ index+1 }}
         </v-toolbar-title>
       </v-toolbar>
@@ -71,7 +76,7 @@
           <v-row>
             <v-col>
               <v-btn block max-width="100%"
-              class="overflow-x-hidden"
+              class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===0"
               :color="chosen_ans_list[index]===0 ? 'answerSelected' : 'passive'"
               @click="check_answer(0, questions_ans_list[index], obj, index)">
@@ -80,7 +85,7 @@
             </v-col>
             <v-col>
               <v-btn block max-width="100%"
-              class="overflow-x-hidden"
+              class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===1"
               :color="chosen_ans_list[index]===1 ? 'answerSelected' : 'passive'"
               @click="check_answer(1, questions_ans_list[index], obj, index)">
@@ -91,7 +96,7 @@
           <v-row>
             <v-col>
               <v-btn block max-width="100%"
-              class="overflow-x-hidden"
+              class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===2"
               :color="chosen_ans_list[index]===2 ? 'answerSelected' : 'passive'"
               @click="check_answer(2, questions_ans_list[index], obj, index)">
@@ -100,7 +105,7 @@
             </v-col>
             <v-col>
               <v-btn block max-width="100%" 
-              class="overflow-x-hidden"
+              class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===3"
               :color="chosen_ans_list[index]===3 ? 'answerSelected' : 'passive'"
               @click="check_answer(3, questions_ans_list[index], obj, index)">
@@ -118,7 +123,7 @@
       <p>{{ finish_req() }}</p> -->
 
 
-      <v-btn 
+      <!-- <v-btn 
         v-if="finish_req()"
         class="mt-3" 
         @click="finish_quiz()"
@@ -129,17 +134,26 @@
         v-if="!finish_req()"
         class="mt-3" 
         block disabled
-        >ответьте на все вопросы ({{ current_answers }}/{{ user.optional_digit }})</v-btn>
+        >ответьте на все вопросы ({{ current_answers }}/{{ user.optional_digit }})</v-btn> -->
 
 
-        <v-btn 
-        v-if="debug"
-        @click="finish_quiz()"
-        class="mt-3" 
-        block 
-        color="primary"
-        >завершить (debug)</v-btn>
+        
     </div>
+
+    <v-container class="mt-7" >
+      <v-btn 
+        v-if="quiz_state"
+        style="position: fixed; bottom: 0;"
+        @click="finish_quiz()"
+        class="ma-3 shaded" 
+        color="primary"
+      >завершить (осталось {{ (timerCount/2).toFixed()  }} c)</v-btn>
+
+    </v-container>
+    
+
+
+
 
     <div class="finish" v-if="!quiz_state">
 
@@ -180,13 +194,28 @@
                       <td>{{ user.group }}</td>
                     </tr>
                     <tr>
-                      <td>Оценка:</td>
-                      <td :style='`color: ${evaluate_results(correct_count, user.optional_digit)};`'>{{ mark }}</td>
+                      <td>Осталось времени:</td>
+                      <td>{{ printTime((timerCount/2).toFixed()) }}</td>
                     </tr>
                     <tr>
-                      <td>Время написания:</td>
-                      <td>{{ user.group }}</td>
+                      <td>верных ответов:</td>
+                      <td>{{ correct_count }}/{{user.optional_digit}}</td>
                     </tr>
+                    <tr>
+                      <td>Итого очков:</td>
+                      <td>{{ 
+                            getScore(
+                              correct_count,  
+                              user.optional_digit, 
+                              (timerCount/2).toFixed(), 
+                              timerMax 
+                            ) 
+                          }}</td>
+                    </tr>
+                    <!-- <tr>
+                      <td>Оценка:</td>
+                      <td :style='`color: ${evaluate_results(correct_count, user.optional_digit)};`'>{{ mark }}</td>
+                    </tr> -->
                   </tbody>
                 </template>
 
@@ -195,13 +224,17 @@
             </v-col>
             <v-col class="text-center my-5">
               <v-progress-circular
+                rotate="270"
                 size="200"
                 width="30"
                 :value="(correct_count/user.optional_digit)*100"
                 :color="evaluate_results(correct_count, user.optional_digit)"
               >
-              <v-chip>
+              <v-chip v-if="correct_count != user.optional_digit">
                 {{ correct_count }}/{{user.optional_digit}}
+              </v-chip>
+              <v-chip v-if="correct_count == user.optional_digit">
+                ты походу жульничаешь... {{ correct_count }}/{{user.optional_digit}}
               </v-chip>
                 
               </v-progress-circular>
@@ -215,17 +248,6 @@
           
         </v-card-actions>
       </v-card>
-    <!-- <div class="finish" v-if="quiz_state"> -->
-      
-      <!-- <v-progress-circular
-        size="200"
-        width="30"
-        :value="(correct_count/user.optional_digit)*100"
-        :color="evaluate_results(correct_count, user.optional_digit)"
-      >
-        {{ correct_count }}/{{user.optional_digit}}
-      </v-progress-circular> -->
-      <!-- <p>{{ evaluate_results(correct_count, user.optional_digit) }}</p> -->
     </div>
   </v-container>
 </template>
@@ -252,7 +274,11 @@ import questions from '../data/questions.js';
       questions_list: questions,
       correct_count: 1,
       quiz_list: [],
-      questions_final_list: []
+      questions_final_list: [],
+
+      timerCount: 10,
+      timerEnabled: true,
+      timerMax: 10
 
     }),
     methods:{
@@ -327,14 +353,19 @@ import questions from '../data/questions.js';
             )
         }
       },
-
+      // запутывает массив. Использовалось для перемешивания вопросов. 
+      // Единственное, не трогаю последний вопрос, который всегда остаётся халявным
       shuffle_arr(array, rand_num_arr){
-        console.log('array',array)
+        // console.log('array',array)
+
+        // иду от последнего элемента и дальше спускаясь к первому, 
         let currentIndex = array.length;
-        // While there remain elements to shuffle...
+        // Пока есть что перемешивать
         while (currentIndex != 0) {
-          // Pick a remaining element...
-          let randomIndex = rand_num_arr[0] % (array.length-currentIndex+1)
+          // ВЫбрать что-то из не перемешанных
+          // var rand_index = rand_num_arr.length - (currentIndex*currentIndex)
+          // console.log(rand_index)
+          let randomIndex = rand_num_arr[currentIndex] % (array.length-currentIndex+1)
           currentIndex--;
           // And swap it with the current element.
           [array[currentIndex], array[randomIndex]] = [
@@ -342,11 +373,11 @@ import questions from '../data/questions.js';
         }
       },
 
-      // 
+      // создаёт вопросы-пустышки, которые не имеют реального смысла
       generate_questions_to_list(){
         var i = this.questions_list.length
         var rand_array = this.get_rand(this.get_seed(this.user))
-        while(i<rand_array.length)
+        while(i<(rand_array.length-1))
         {
           this.questions_list.push(
             {
@@ -363,7 +394,9 @@ import questions from '../data/questions.js';
           i++
         }
       },
-
+      // "переммешать" вопросы, хотя по факту просто меняю местами 
+      // правильный ответ и тот, что стоит в нужном слоте...
+      // могу ещё сделать шанс того, что будут и другие перемешаны, но чет пока впадлу.
       shuffle_answers(){
         // Прохожусь по каждому вопросу с соответствующим значением правильного ответа
         // Изначально правильный ответ всегда в первой ячейке массива
@@ -428,6 +461,7 @@ import questions from '../data/questions.js';
       },
       finish_quiz(){
         this.quiz_state=false
+        this.timerEnabled = false;
         this.correct_count = 0
         for (var i=0; i<this.user.optional_digit; i++){
           if (this.chosen_ans_list[i]==this.questions_ans_list [i]){
@@ -436,7 +470,38 @@ import questions from '../data/questions.js';
           }
         }
       },
+      
+      // функция округляет в лучшую для студента сторону
+      // [min, max)
+      between(x, min, max){
+        return x >= min && x < max
+      },
+      get_img(input){
+        if(input){
+          return 'https://i.pinimg.com/originals/ea/94/f1/ea94f17cce722d9bc1b8643a0277da66.jpg'
+        } else return 'https://cdn.culture.ru/images/56e7c169-0ced-5fa8-8764-860334000db0'
+      },
+
+      
+
       evaluate_results(correct, total){
+        const ratio = correct/total,
+              correct_color = [0,255,255],
+              wrong_color = [255,0,0]
+        return this.interpolateColor(wrong_color, correct_color, ratio)
+      },
+
+      interpolateColor(color1, color2, factor) {
+          var result = color1
+          for (var i = 0; i < 3; i++) {
+              result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+          }
+          return `rgb(${result[0]},${result[1]},${result[2]})`;
+      },
+
+
+      // старая графа оценивания как для теста
+      evaluate_results_old(correct, total){
         // 0-40% - плохо
         // 41-60% - троечка
         // 61-85% - четвёрка
@@ -467,29 +532,86 @@ import questions from '../data/questions.js';
         this.mark='Отлично'
         return 'blue'
       },
-      // функция округляет в лучшую для студента сторону
-      // [min, max)
-      between(x, min, max){
-        return x >= min && x < max
-      },
-      get_img(input){
-        if(input){
-          return 'https://i.pinimg.com/originals/ea/94/f1/ea94f17cce722d9bc1b8643a0277da66.jpg'
-        } else return 'https://cdn.culture.ru/images/56e7c169-0ced-5fa8-8764-860334000db0'
-      },
-      
 
+
+
+
+
+      printTime(time_sec){
+        var hours = Math.floor(time_sec/3600),
+          minutes = Math.floor(time_sec/60),
+          seconds = (time_sec % 60).toFixed()
+        if (hours > 0){
+          return `${hours} ч, ${minutes} м, ${seconds} с`
+        } else {
+          if(minutes > 0){
+            return `${minutes} м, ${seconds} с`
+          }
+          
+        }  
+        return `${seconds} с`      
+      },
+
+
+      // final Score value
+      getScore(right, total, timeLeftSec, timeMaxSec){
+
+        const timeLeft = Number(timeLeftSec),
+              timeMax = timeMaxSec,
+              correct = Number(right),
+              all = Number(total);
+        var score = this.calcScore(correct, all, timeLeft)
+        var maxScore = this.calcScore(all, all, timeMaxSec)
+        return `${score}/${maxScore}`
+      },
+      calcScore(correct, all, timeLeft){
+        return correct * 10 * (1 + correct + all + ( (timeLeft / 60) * ( 5 * correct/all ) ) ).toFixed()
+      }
+
+
+      
 
 
 
     },
     mounted(){
       var rand_arr = this.get_rand(this.get_seed(this.user))
-      // this.generate_questions_to_list()
+      this.generate_questions_to_list()
       this.get_questions(rand_arr)
       this.get_question_answers(rand_arr)
       this.shuffle_answers()
+      this.timerCount = this.user.timer * 2 * 60
+      this.timerMax = this.user.timer * 60
+      this.timerEnabled = true;
+
+    },
+    watch: {
+
+      timerEnabled(value) {
+          if (value) {
+              setTimeout(() => {
+                this.timerCount--;
+              }, 1000);
+          }
+      },
+
+      timerCount: {
+        handler(value) {
+          if (value > 0 && this.timerEnabled) {
+            setTimeout(() => {
+              this.timerCount-=1;
+            }, 1000);
+          } else {
+            if (value==0){
+              this.finish_quiz()
+            }
+          }
+
+        },
+        immediate: true // This ensures the watcher is triggered upon creation
+      }
     }
+
   }
 </script>
 
@@ -499,6 +621,9 @@ import questions from '../data/questions.js';
   max-height: 25px;
 
   overflow: hidden;
+}
+.shaded{
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.055));
 }
 </style>
 
