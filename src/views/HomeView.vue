@@ -196,7 +196,7 @@
       user_name: 'Тестовый',
       user_surname: 'Вариант',
       optional_digit: 50,
-      timer: 10
+      timer: 5
     }),
     methods:{
       get_img(input){

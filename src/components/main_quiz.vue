@@ -42,38 +42,42 @@
 
       <v-card>
         <v-img
-            height="80px"
+            height="200px"
             :src="get_img(!$vuetify.theme.dark)"
           >
             <v-app-bar
               flat
               color="rgba(0, 0, 0, 0)"
             >
+              <v-toolbar-title class="text-h6 white--text pl-0">
+                Начали!
+              </v-toolbar-title>
             </v-app-bar>
+            
           </v-img>
-          <v-card-title>
+          <!-- <v-card-title>
             Данные участника: 
           </v-card-title>
           <v-card-text>
             <v-simple-table class="text-h6 pl-0">
-                  <template v-slot:default>
-                    <tbody>
-                      <tr>
-                        <td>Фамилия:</td>
-                        <td>{{ user.user_surname }}</td>
-                      </tr>
-                      <tr>
-                        <td>Имя:</td>
-                        <td>{{ user.user_name }}</td>
-                      </tr>
-                      <tr>
-                        <td>Группа:</td>
-                        <td>{{ user.group }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-          </v-card-text>
+                <template v-slot:default>
+                  <tbody>
+                    <tr>
+                      <td>Фамилия:</td>
+                      <td>{{ user.user_surname }}</td>
+                    </tr>
+                    <tr>
+                      <td>Имя:</td>
+                      <td>{{ user.user_name }}</td>
+                    </tr>
+                    <tr>
+                      <td>Группа:</td>
+                      <td>{{ user.group }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+          </v-card-text> -->
       </v-card>
 
 
@@ -330,15 +334,34 @@
                   calcScore(correct_count, user.optional_digit, (timerCount/2))
                   /calcScore(user.optional_digit, user.optional_digit, timerMax)
                   )*100 }} -->
+
+                  {{ 
+                    getScore(
+                              correct_count,  
+                              user.optional_digit, 
+                              (timerCount/2).toFixed(), 
+                              timerMax 
+                            ).split('/')[0]
+                  }} / {{ 
+                    getScore(
+                              correct_count,  
+                              user.optional_digit, 
+                              (timerCount/2).toFixed(), 
+                              timerMax 
+                            ).split('/')[1]
+                    }}
               </p>
               <v-progress-circular
                 rotate="270"
                 size="100"
                 width="15"
                 :value="
-                  calcScore(correct_count, user.optional_digit, (timerCount/2))
-                  /calcScore(user.optional_digit, user.optional_digit, timerMax)
-                  *100"
+                  (
+                    getScore(correct_count, user.optional_digit, (timerCount/2).toFixed(), timerMax
+                  ).split('/')[0]
+                  / getScore(correct_count, user.optional_digit, (timerCount/2).toFixed(), timerMax
+                  ).split('/')[1]
+                  )*100"
                 :color="evaluate_results(correct_count, user.optional_digit)"
               >
               <v-chip>
@@ -709,9 +732,9 @@ import questions from '../data/questions.js';
         return `${score}/${maxScore}`
       },
       calcScore(correct, all, timeLeft){
-        console.log('correct',correct, 'all', all, 'timeLeft', timeLeft)
+        // console.log('correct',correct, 'all', all, 'timeLeft', timeLeft)
         var answer =  correct * 10 * (1 + correct + all + ( (timeLeft / 60) * ( 5 * correct/all ) ) )
-        console.log(answer)
+        // console.log(answer)
         return answer.toFixed()
 
       }
