@@ -1,5 +1,5 @@
 <template>
-  <div class="app mb-12">
+  <div class="app mb-3">
     <div class="debug" v-if="debug">
       <v-row>
 
@@ -110,7 +110,7 @@
             <v-row>
               <v-btn
                 v-if="!!group && !!user_name && !!user_surname && optional_digit>=1"
-                @click="authorizing=false"
+                @click="start()"
                 block
                 color="primary"
               >
@@ -119,7 +119,6 @@
 
               <v-btn
                 v-if="!(!!group && !!user_name && !!user_surname && optional_digit>=1)"
-                @click="authorizing=false"
                 disabled
                 block
               >
@@ -177,7 +176,7 @@
       name: info.name,
       description: info.description,
       authorizing: true,
-      debug: true,
+      debug: false,
       group: 'ТСТ-442',
       user_name: 'Тестовый',
       user_surname: 'Вариант',
@@ -185,6 +184,12 @@
       timer: 5
     }),
     methods:{
+      start(){
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        this.authorizing = false
+      },
+
       get_img(input){
         if(input){
           return 'https://i.pinimg.com/originals/ea/94/f1/ea94f17cce722d9bc1b8643a0277da66.jpg'

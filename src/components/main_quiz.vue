@@ -42,7 +42,7 @@
 
       <v-card>
         <v-img
-            height="200px"
+            height="150px"
             :src="get_img(!$vuetify.theme.dark)"
           >
             <v-app-bar
@@ -240,12 +240,25 @@
          -->    
     </div>
 
-    <v-btn 
+    <v-footer
+      color="rgba(0,0,0,0)"
+      fixed
+    >
+      <v-btn 
+        v-if="quiz_state"
+        @click="finish_quiz()"
+        block
+        class="shaded" 
+        color="primary"
+      >завершить (осталось {{ (timerCount/120).toFixed()  }} мин)</v-btn>
+    </v-footer>
+
+    <!-- <v-btn 
       v-if="quiz_state"
       @click="finish_quiz()"
       class="shaded bottom-button" 
       color="primary"
-    >завершить (осталось {{ (timerCount/120).toFixed()  }} мин)</v-btn>
+    >завершить (осталось {{ (timerCount/120).toFixed()  }} мин)</v-btn> -->
 
     <div class="finish" v-if="!quiz_state">
       <v-card 
@@ -583,34 +596,29 @@ import questions from '../data/questions.js';
           if (current_ans_position != 0){
             this.questions_final_list[i].answer = this.relocateInArray(
               this.questions_final_list[i].answer, 
-              0, 
-              current_ans_position
+              0, current_ans_position
             )
-
-            // var temp = current_question[0]
-            // current_question[0] = current_question[current_ans_position]
-            // current_question[current_ans_position] = temp
-            // this.questions_final_list[i].answer = current_question 
             available_slots.splice(current_ans_position, 1)
           }
           available_slots.splice(available_slots[0], 1)
           console.log( available_slots )
-
-          if ((r_num_array[i]%2)==1){
+          if ((r_num_array[i]%3)>0){
             this.questions_final_list[i].answer = this.relocateInArray(
               this.questions_final_list[i].answer, 
               available_slots[0], 
               available_slots.at(-1)
             )
+            available_slots.splice(available_slots[0], 1)
+            if (available_slots.length>1){
+              this.questions_final_list[i].answer = this.relocateInArray(
+                this.questions_final_list[i].answer, 
+                available_slots[0], 
+                available_slots.at(-1)
+              )
+            }
           }
 
-          // if (r_num_array[i]%2){
-          //   var index_from = available_slots[0]
-          //   var index_to = available_slots.at(-1)
-          //   var temp = current_question[index_from]
-          //   current_question[index_from] = current_question[index_to]
-          //   current_question[index_to] = temp
-          // }
+          
         }
       },
       relocateInArray(array, pos1, pos2){

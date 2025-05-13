@@ -14,7 +14,7 @@
       <v-spacer></v-spacer>
 
       <v-dialog 
-        transition="slide-x-transition"  
+        transition="slide-y-transition"  
         max-height="80%" 
         v-model="dialog"
       >
@@ -65,12 +65,23 @@
 
     <v-main>
       <router-view/>
+      
+      <v-footer padless>
+        <v-card flat tile color="primary" width="100%">
+          <v-divider></v-divider>
+
+          <v-card-text class="white--text text-center">
+            РУТ (МИИТ) 2025 &copy;
+          </v-card-text>
+        </v-card>
+      </v-footer>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import creditsCard from './components/creditsCard.vue'
+
 export default {
   name: 'App',
   components:{
