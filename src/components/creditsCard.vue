@@ -1,52 +1,73 @@
 <template>
     <div class="credits">
         <v-card tile>
-            <!-- <v-card-title>
-                О странице
-            </v-card-title> -->
             <v-card-text class="text-justify">
                 
+                <!-- авторы -->
+                
+                <div class="">
+                    <p class="text-h5">
+                        Авторы
+                    </p>
+                    <p>
+                        {{ info.authors.organisation }}
+                    </p>
+                    <v-simple-table>
+                        <thead>
+                            <tr>
+                                <th> ФИО </th>
+                                <th> роль</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(obj, index) in info.authors.authorsList" :key="index+1">
+                                <td>
+                                    {{ obj.fullName }} 
+                                </td>
+                                <td>
+                                    {{ obj.role }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>  
+                </div>
 
-                <p>
-                    По итогу прохождения викторины у вас будет свой счёт. 
-                    Он выдаётся в очках, которые зависят как от ваших знаний,
-                    так и от скорости ответов. 
-                </p>
-                <p>
-                    В большей мере конечно имеют значения знания, 
-                    но за счёт времени можно умножить счёт вдвое. 
-                    Потому можете использовать разные стратегии.
-                    Формула расчета очков:
-                </p>
-                <p class="font-weight-black text-center"> C * 10 * (1 + (Tm * 5 * C / A) + C + A) </p>
-                <p>, где:</p>
-                <ul>
-                    <li>
-                        C - правильные ответы;
-                    </li>
-                    <li>
-                        A - всего ответов;
-                    </li>
-                    <li>
-                        Tm - количество оставшихся минут (округляя вниз).
-                    </li>
-                </ul>
+                <v-divider class="my-2"/>
+
+                <!-- описание работы + формула -->
+
+                <div class="">
+                    <p v-for="(obj, index) in info.description" :key="index+1">
+                        {{ obj }}
+                    </p>
+                    
+                    <p class="font-weight-black text-center">
+                        {{ info.formulaitcs.formula }}
+                    </p>
+                    <p>, где:</p>
+
+                    <v-simple-table>
+                        <tbody>
+                            <tr v-for="(obj, index) in info.formulaitcs.formulaVariables" :key="index+1">
+                                <td>
+                                    {{ obj.variable }} 
+                                </td>
+                                <td>
+                                    {{ obj.meaning }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>
+                </div>
+
+                
+
                 
                 
-                <p>Страница создана студентами РУТ (МИИТ), группы ТСТ-442:
-                </p>
-                <ul class="font-weight-medium">
-                    <li>Михайлов Александр Сергеевич</li>
-                    <li>Прибавкин Дмитрий Андреевич </li>
-                </ul>
-                <br>
-                <!-- <p>Оценка по доле верных ответов:</p>
-                <ul class="font-weight-medium">
-                    <li>0-40% - незачет</li>
-                    <li>40-60% - зачтено</li>
-                    <li>60-85% - хорошо</li>
-                    <li>85-100% - отлично</li>
-                </ul> -->
+                
+                <v-divider class="my-2"/>
+
+                <!-- список тем в вопросах -->
 
                 <p>Составленные вопросы содержат в себе следующие темы:</p>
                 <ul class="font-weight-medium">
@@ -64,10 +85,12 @@
   
 <script>
 import topicList from '../data/topicList.js';
+import info from '../data/info.js';
 export default {
     name: 'creditsCard',
     data: () => ({
     topics: topicList,
+    info: info.creditsCard
     }),
     methods:{      
     }

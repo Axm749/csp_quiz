@@ -433,7 +433,7 @@ import questions from '../data/questions.js';
 
     data: () => ({
       quiz_state: true,
-      debug: false,
+      debug: true,
       jtr: 0,
       questions_num_list: [],
       questions_ans_list: [],
@@ -568,29 +568,56 @@ import questions from '../data/questions.js';
       // "переммешать" вопросы, хотя по факту просто меняю местами 
       // правильный ответ и тот, что стоит в нужном слоте...
       // могу ещё сделать шанс того, что будут и другие перемешаны, но чет пока впадлу.
-      shuffle_answers(){
+      shuffle_answers(r_num_array){
         // Прохожусь по каждому вопросу с соответствующим значением правильного ответа
         // Изначально правильный ответ всегда в первой ячейке массива
         // Подходя к ячейке меняю местами первую ячейку (индекс ноль) с ячейкой, 
         // на которой будет правильный ответ
         //
+        // Далее перемешивается
         // на этом по сути и всё
         for(var i=0; i<this.questions_final_list.length; i++){
-
-          var current_question = this.questions_final_list[i].answer
+          // var current_question = this.questions_final_list[i].answer
           var current_ans_position = this.questions_ans_list[i]
-          
-          // console.log(current_question, current_ans_position, i)
+          var available_slots = [0, 1, 2, 3]
           if (current_ans_position != 0){
-            // console.log('ans position', current_ans_position, '!= 0 ... swapping')
-            var temp = current_question[0]
-            current_question[0] = current_question[current_ans_position]
-            current_question[current_ans_position] = temp
-            this.questions_final_list[i].answer = current_question 
-          } else {
-            // console.log('ans position', current_ans_position, '== 0')
+            this.questions_final_list[i].answer = this.relocateInArray(
+              this.questions_final_list[i].answer, 
+              0, 
+              current_ans_position
+            )
+
+            // var temp = current_question[0]
+            // current_question[0] = current_question[current_ans_position]
+            // current_question[current_ans_position] = temp
+            // this.questions_final_list[i].answer = current_question 
+            available_slots.splice(current_ans_position, 1)
           }
+          available_slots.splice(available_slots[0], 1)
+          console.log( available_slots )
+
+          if ((r_num_array[i]%2)==1){
+            this.questions_final_list[i].answer = this.relocateInArray(
+              this.questions_final_list[i].answer, 
+              available_slots[0], 
+              available_slots.at(-1)
+            )
+          }
+
+          // if (r_num_array[i]%2){
+          //   var index_from = available_slots[0]
+          //   var index_to = available_slots.at(-1)
+          //   var temp = current_question[index_from]
+          //   current_question[index_from] = current_question[index_to]
+          //   current_question[index_to] = temp
+          // }
         }
+      },
+      relocateInArray(array, pos1, pos2){
+        var temp = array[pos1]
+        array[pos1] = array[pos2]
+        array[pos2] = temp
+        return array
       },
 
 
@@ -648,13 +675,11 @@ import questions from '../data/questions.js';
         if(input){
           return 'https://i.pinimg.com/originals/ea/94/f1/ea94f17cce722d9bc1b8643a0277da66.jpg'
         } else return 'https://cdn.culture.ru/images/56e7c169-0ced-5fa8-8764-860334000db0'
-      },
-
-      
+      },   
 
       evaluate_results(correct, total){
         const ratio = correct/total,
-              correct_color = [0,255,255],
+              correct_color = [0,255,0],
               wrong_color = [255,0,0]
         return this.interpolateColor(wrong_color, correct_color, ratio)
       },
@@ -664,9 +689,8 @@ import questions from '../data/questions.js';
           for (var i = 0; i < 3; i++) {
               result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
           }
-          return `rgb(${result[0]},${result[1]},${result[2]})`;
+          return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
       },
-
 
       // старая графа оценивания как для теста
       evaluate_results_old(correct, total){
@@ -700,10 +724,6 @@ import questions from '../data/questions.js';
         this.mark='Отлично'
         return 'blue'
       },
-
-
-
-
 
       printTime(time_sec){
         var hours = Math.floor(time_sec/3600),
@@ -750,7 +770,7 @@ import questions from '../data/questions.js';
       this.generate_questions_to_list()
       this.get_questions(rand_arr)
       this.get_question_answers(rand_arr)
-      this.shuffle_answers()
+      this.shuffle_answers(rand_arr)
       this.timerCount = this.user.timer * 2 * 60
       this.timerMax = this.user.timer * 60
       this.timerEnabled = true;

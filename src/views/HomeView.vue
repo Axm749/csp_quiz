@@ -59,25 +59,13 @@
           >
             <v-toolbar-title class="text-h6 white--text pl-0">
               <!-- <v-icon dark class="mr-2">mdi-application-edit-outline</v-icon> -->
-              Викторина
+              {{ name }}
             </v-toolbar-title>
           </v-app-bar>
         </v-img>
         <v-card-text class="text-justify">
-          <p>
-            Вам будут представлены вопросы по 
-            пройденным на 3 и 4 курсах темах цифровых систем передачи. 
-          </p>
-
-          <p>
-            Ваша задача — ответить на максимальное число вопросов за минимальное время.
-            На все вопросы отвечать необязательно, нужно ответить на как можно большее число.
-            Итог будет подводиться по итоговому количеству очков. 
-            Они зависят как от числа правильных ответов, так и от времени завершения ответов. 
-            Имеет смысл заканчивать досрочно, нежели потратить много времени на вопросы, в которых не уверены.
-            <!-- Если не знаете ответа на вопрос, лучше его пропустить 
-            и набрать очки на следующих, чтобы не терять время.
-            Число ответов имеет главную роль в подсчёте очков, но и время способно умножить итоговый счёт. -->
+          <p v-for="(obj, index) in description" :key="index+1">
+            {{ obj }} 
           </p>
           
           <v-col class="mt-5">
@@ -115,6 +103,8 @@
                 :label="`время: ${timer} минут`"
                 min="1"
                 max="9"
+                ticks="always"
+                tick-size="5"
               />
             </v-row>
             <v-row>
@@ -139,13 +129,6 @@
           </v-col> 
 
         </v-card-text>
-          
-        
-        
-          
-        
-       
-        
       </v-card>
       <div class="revoke" v-if="!authorizing && debug">
         <v-row>
@@ -181,7 +164,8 @@
 </template>
 
 <script>
-  import main_quiz from '../components/main_quiz'
+  import main_quiz from '../components/main_quiz';
+  import info from '../data/info.js';
 
   export default {
     name: 'Home',
@@ -190,8 +174,10 @@
       main_quiz,
     },
     data: () => ({
+      name: info.name,
+      description: info.description,
       authorizing: true,
-      debug: false,
+      debug: true,
       group: 'ТСТ-442',
       user_name: 'Тестовый',
       user_surname: 'Вариант',
