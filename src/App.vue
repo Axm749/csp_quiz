@@ -66,7 +66,9 @@
     <v-main>
       <router-view/>
       
-      <v-footer padless>
+      
+    </v-main>
+    <v-footer padless>
         <v-card flat tile color="primary" width="100%">
           <v-divider></v-divider>
 
@@ -75,7 +77,6 @@
           </v-card-text>
         </v-card>
       </v-footer>
-    </v-main>
   </v-app>
 </template>
 
