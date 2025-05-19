@@ -775,7 +775,7 @@ import questions from '../data/questions.js';
     },
     mounted(){
       var rand_arr = this.get_rand(this.get_seed(this.user))
-      this.generate_questions_to_list()
+      // this.generate_questions_to_list()
       this.get_questions(rand_arr)
       this.get_question_answers(rand_arr)
       this.shuffle_answers(rand_arr)
