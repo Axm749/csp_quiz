@@ -17,12 +17,18 @@ export default new Vuetify({
           },
           dark: {
             primary: colors.teal.darken3,
-            secondary: colors.cyan.darken2,
+            secondary: colors.teal.base,
             accent: colors.teal.base,
             task: colors.teal.base,
             answerSelected: colors.teal.lighten1,
             passive: colors.blueGrey.base
           },
         },
+        options: { customProperties: true },
+        themeCache: {
+        get: key => localStorage.getItem(key),
+        set: (key, value) => localStorage.setItem(key, value),
       },
+    },
+    iconfont: 'md'
 });

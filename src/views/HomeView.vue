@@ -48,7 +48,7 @@
       </v-row>
     </div>
     <v-container v-if="authorizing">
-      <v-card class="auth" >
+      <v-card class="auth" elevation="10">
         <v-img
           height="80px"
           :src="get_img(!$vuetify.theme.dark)"

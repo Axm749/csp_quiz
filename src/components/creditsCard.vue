@@ -72,12 +72,14 @@
                 <p>Составленные вопросы содержат в себе следующие темы:</p>
                 <ul class="font-weight-medium">
                     <li v-for="(obj, index) in topics" :key="index+1">
-                        {{ obj }}{{ index }}
+                        {{ obj }}
                     </li>
                 </ul>
             </v-card-text>
             <v-card-actions>
-                
+                <v-btn @click="what()">
+                    ответы
+                </v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -93,6 +95,9 @@ export default {
     info: info.creditsCard
     }),
     methods:{      
+        what(){
+            alert('ну и чего ты ожидаешь от этой кнопки?')
+        }
     }
 }
 </script>

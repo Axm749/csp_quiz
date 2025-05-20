@@ -6,17 +6,13 @@
       dark
     >
       
-      <v-btn class="d-flex align-center"
-        @click="$vuetify.theme.dark = !$vuetify.theme.dark" 
-          icon>
-        <v-icon>mdi-theme-light-dark</v-icon>
-      </v-btn>
-      <v-spacer></v-spacer>
+      
+      
 
       <v-dialog 
         transition="slide-y-transition"  
         max-height="80%" 
-        v-model="dialog"
+        v-model="dialog_credits"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -38,7 +34,7 @@
           <v-btn
             icon
             dark
-            @click="dialog = false"
+            @click="dialog_credits = false"
           >
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -47,26 +43,64 @@
       </v-dialog>
 
 
-      <!-- <v-btn class="d-flex align-center"
+      <v-spacer></v-spacer>
+
+      <v-btn class="d-flex align-center"
         @click="$vuetify.theme.dark = !$vuetify.theme.dark" 
           icon>
-        <v-icon>mdi-information-outline</v-icon>
-      </v-btn> -->
-      
-      <!-- <v-btn
-        @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-        text
+        <v-icon>mdi-theme-light-dark</v-icon>
+      </v-btn>
+
+
+
+      <v-dialog 
+        transition="slide-y-transition"  
+        max-height="80%" 
+        v-model="dialog_options"
       >
-        <span class="mr-2">Изменить тему</span>
-        <v-icon v-if="!$vuetify.theme.dark">mdi-theme-light-dark</v-icon>
-        <v-icon v-if="$vuetify.theme.dark">mdi-theme-light-dark</v-icon>
-      </v-btn> -->
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              dark
+              v-bind="attrs"
+              v-on="on"
+              icon
+            >
+            <v-icon>mdi-cog</v-icon>
+          </v-btn>
+        </template>
+        
+        <!-- <v-card> -->
+          <v-toolbar
+            dark
+            color="primary"
+          >
+            
+            <v-toolbar-title>Настройка темы</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              dark
+              @click="dialog_options = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+            <themePicker class="mt-3"/>
+            
+            
+          
+          
+        <!-- </v-card> -->
+        
+        
+      </v-dialog>
+
+
+      
     </v-app-bar>
 
     <v-main>
       <router-view/>
-      
-      
     </v-main>
     <v-footer padless>
         <v-card flat tile color="primary" width="100%">
@@ -82,16 +116,20 @@
 
 <script>
 import creditsCard from './components/creditsCard.vue'
+import themePicker from './components/themePicker.vue';
 
 export default {
   name: 'App',
   components:{
-    creditsCard
+    creditsCard,
+    themePicker
   },
 
   data: () => ({
     //
-    dialog: false
+    dialog_credits: false,
+    dialog_options: false
   }),
 };
 </script>
+

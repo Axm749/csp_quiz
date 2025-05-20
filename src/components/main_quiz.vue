@@ -40,7 +40,7 @@
     <p style="display: none;">just to render {{ jtr }}</p>
     <div class="quiz" v-if="quiz_state">
 
-      <v-card>
+      <v-card elevation="10">
         <v-img
             height="150px"
             :src="get_img(!$vuetify.theme.dark)"
@@ -53,49 +53,17 @@
                 Начали!
               </v-toolbar-title>
             </v-app-bar>
-            
           </v-img>
-          <!-- <v-card-title>
-            Данные участника: 
-          </v-card-title>
-          <v-card-text>
-            <v-simple-table class="text-h6 pl-0">
-                <template v-slot:default>
-                  <tbody>
-                    <tr>
-                      <td>Фамилия:</td>
-                      <td>{{ user.user_surname }}</td>
-                    </tr>
-                    <tr>
-                      <td>Имя:</td>
-                      <td>{{ user.user_name }}</td>
-                    </tr>
-                    <tr>
-                      <td>Группа:</td>
-                      <td>{{ user.group }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-          </v-card-text> -->
       </v-card>
-
-
-
-      <!-- <p>quiz_list: {{ quiz_list }}</p> -->
-      <!-- <p>количество вопросов в архиве: {{ questions_list.length }}</p> -->   
-      <!-- <p>список номеров вопроса: {{ questions_num_list }}</p> -->
-      <!-- <p>список правильных ответов: {{ questions_ans_list }}</p> -->
-      <!-- <p>список выбранных ответов: {{ chosen_ans_list }}</p> -->
-      <!-- <p>вопросы: {{ questions_list }}</p> -->
       
       <v-card 
         v-for="(obj, index) in questions_final_list.slice(0,user.optional_digit)" :key="index+1"
         class="mt-3"
+        elevation="5"
       >
         
       <v-toolbar
-        color="task"
+        color="secondary"
         dark
         dense
         flat
@@ -104,77 +72,23 @@
         <v-toolbar-title class="text-body-2 ">
           вопрос №{{ index+1 }}
         </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-chip v-if="debug" color="primary">
+          [debug] Q={{ obj.id }}, 
+          correct: {{ questions_ans_list[index]+1 }}, 
+          chosen: {{ (chosen_ans_list[index]+1)<5 ? (chosen_ans_list[index]+1) : 'none' }}
+        </v-chip>
+        
       </v-toolbar>
       <v-card-text>
         {{obj.question}}
-        <!-- <p>{{ obj }}</p> -->
-        <p v-if="debug">correct answer: {{ questions_ans_list[index]+1 }}</p> 
-        <p v-if="debug">chosen answer: {{ (chosen_ans_list[index]+1)<5 ? (chosen_ans_list[index]+1) : 'none' }}</p> 
       </v-card-text>
 
       <v-card-actions>   
-        <!-- {{ chosen_ans_list[index] }} -->
-        <!-- <v-btn-toggle
-          v-model="chosen_ans_list[index]"
-          width="100%"
-        >
-          <v-container width="100%">
-            <v-row>
-              <v-col>
-                <v-row>
-                  <v-btn
-                  block width="100%"
-                  class="overflow-x-hidden shaded mt-2 px-2"
-                  :dark="chosen_ans_list[index]===0"
-                  :color="chosen_ans_list[index]===0 ? 'answerSelected' : 'passive'"
-                  >
-                    {{ obj.answer[0] }}
-                  </v-btn>
-                </v-row>
-                <v-row>
-                  <v-btn
-                  block width="100%"
-                  class="overflow-x-hidden shaded mt-2 px-2"
-                  :dark="chosen_ans_list[index]===1"
-                  :color="chosen_ans_list[index]===1 ? 'answerSelected' : 'passive'"
-                  >
-                    {{ obj.answer[1] }}
-                  </v-btn>
-                </v-row>
-              </v-col>
-              <v-col>
-                <v-row>
-                  <v-btn
-                  block width="100%"
-                  class="overflow-x-hidden shaded mt-2 px-2"
-                  :dark="chosen_ans_list[index]===2"
-                  :color="chosen_ans_list[index]===2 ? 'answerSelected' : 'passive'"
-                  >
-                    {{ obj.answer[2] }}
-                  </v-btn>
-                </v-row>
-                <v-row>
-                  <v-btn
-                  block width="100%"
-                  class="overflow-x-hidden shaded mt-2 px-2"
-                  :dark="chosen_ans_list[index]===3"
-                  :color="chosen_ans_list[index]===3 ? 'answerSelected' : 'passive'"
-                  >
-                    {{ obj.answer[3] }}
-                  </v-btn>
-                </v-row>
-              </v-col>
-            </v-row>
-          </v-container>
-          
-          
-        </v-btn-toggle> -->
-        
-        
         <v-col>
           <v-row>
             <v-col>
-              <v-btn block max-width="100%"
+              <v-btn block max-width="100%" elevation="2"
               class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===0"
               :color="chosen_ans_list[index]===0 ? 'answerSelected' : 'passive'"
@@ -183,7 +97,7 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn block max-width="100%"
+              <v-btn block max-width="100%" elevation="2"
               class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===1"
               :color="chosen_ans_list[index]===1 ? 'answerSelected' : 'passive'"
@@ -194,7 +108,7 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-btn block max-width="100%"
+              <v-btn block max-width="100%" elevation="2"
               class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===2"
               :color="chosen_ans_list[index]===2 ? 'answerSelected' : 'passive'"
@@ -203,14 +117,13 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn block max-width="100%" 
+              <v-btn block max-width="100%" elevation="2"
               class="overflow-x-hidden shaded"
               :dark="chosen_ans_list[index]===3"
               :color="chosen_ans_list[index]===3 ? 'answerSelected' : 'passive'"
               @click="check_answer(3, questions_ans_list[index], obj, index)">
                 {{ obj.answer[3] }}
               </v-btn>
-              
             </v-col>
           </v-row>
         </v-col> 
@@ -218,26 +131,7 @@
       
       </v-card-actions>
 
-      </v-card>
-
-      <!-- <p>questions_ans_list {{ questions_ans_list.slice(0, this.user.optional_digit) }}</p>
-      <p>chosen_ans_list {{ chosen_ans_list.slice(0, this.user.optional_digit) }}</p>
-      <p>{{ finish_req() }}</p> -->
-
-
-      <!-- <v-btn 
-        v-if="finish_req()"
-        class="mt-3" 
-        @click="finish_quiz()"
-        block 
-        color="primary"
-        >завершить</v-btn>
-      <v-btn 
-        v-if="!finish_req()"
-        class="mt-3" 
-        block disabled
-        >ответьте на все вопросы ({{ current_answers }}/{{ user.optional_digit }})</v-btn>
-         -->    
+      </v-card>  
     </div>
 
     <v-footer
@@ -250,15 +144,9 @@
         block
         class="shaded" 
         color="primary"
+        elevation="24"
       >завершить (осталось {{ (timerCount/120).toFixed()  }} мин)</v-btn>
     </v-footer>
-
-    <!-- <v-btn 
-      v-if="quiz_state"
-      @click="finish_quiz()"
-      class="shaded bottom-button" 
-      color="primary"
-    >завершить (осталось {{ (timerCount/120).toFixed()  }} мин)</v-btn> -->
 
     <div class="finish" v-if="!quiz_state">
       <v-card 
@@ -315,10 +203,6 @@
                             ) 
                           }}</td>
                     </tr>
-                    <!-- <tr>
-                      <td>Оценка:</td>
-                      <td :style='`color: ${evaluate_results(correct_count, user.optional_digit)};`'>{{ mark }}</td>
-                    </tr> -->
                   </tbody>
                 </template>
               </v-simple-table>
@@ -334,20 +218,15 @@
                 :value="(correct_count/user.optional_digit)*100"
                 :color="evaluate_results(correct_count, user.optional_digit)"
               >
-              <v-chip>
-                {{ correct_count }}/{{user.optional_digit}}
-              </v-chip>
+                <v-chip>
+                  {{ correct_count }}/{{user.optional_digit}}
+                </v-chip>
                 
               </v-progress-circular>
             </v-col>
 
             <v-col class="text-center my-5">
               <p>Очков: 
-                <!-- {{ (
-                  calcScore(correct_count, user.optional_digit, (timerCount/2))
-                  /calcScore(user.optional_digit, user.optional_digit, timerMax)
-                  )*100 }} -->
-
                   {{ 
                     getScore(
                               correct_count,  
@@ -426,11 +305,6 @@
             </v-simple-table>
           </v-row>          
         </v-card-text>
-
-        <v-card-actions>
-               
-          
-        </v-card-actions>
       </v-card>
     </div>
   </v-container>
@@ -821,14 +695,8 @@ import questions from '../data/questions.js';
 
   overflow: hidden;
 }
-.shaded{
-  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.055));
-}
-.bottom-button{
-  position: fixed; 
-  bottom:   10px; 
-  left:     10%;
-  width:    80%;
-}
+/* .shaded{
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.005));
+} */
 </style>
 
