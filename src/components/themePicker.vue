@@ -61,7 +61,7 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
 
-           <v-expansion-panel>
+           <!-- <v-expansion-panel>
                 <v-expansion-panel-header>
                     Изображения
                 </v-expansion-panel-header>
@@ -70,7 +70,7 @@
                     label="Убрать картинки?"
                     />
                 </v-expansion-panel-content>
-            </v-expansion-panel>
+            </v-expansion-panel> -->
         </v-expansion-panels>
 
 
