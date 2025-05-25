@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkcsp_quiz"]=self["webpackChunkcsp_quiz"]||[]).push([[594],{7992:function(u,n,s){s.r(n),s.d(n,{default:function(){return l}});var t=function(){var u=this;u._self._c;return u._m(0)},e=[function(){var u=this,n=u._self._c;return n("div",{staticClass:"about"},[n("h1",[u._v("This is an about page")])])}],i=s(1656),a={},c=(0,i.A)(a,t,e,!1,null,null,null),l=c.exports}}]);
-//# sourceMappingURL=about.9d5aa7d6.js.map
