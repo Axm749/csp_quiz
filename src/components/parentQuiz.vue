@@ -52,17 +52,27 @@
         <v-img
           height="80px"
           :src="get_img(!$vuetify.theme.dark)"
+          v-if="images"
         >
           <v-app-bar
             flat
             color="rgba(0, 0, 0, 0)"
           >
             <v-toolbar-title class="text-h6 white--text pl-0">
-              <!-- <v-icon dark class="mr-2">mdi-application-edit-outline</v-icon> -->
               {{ name }}
             </v-toolbar-title>
           </v-app-bar>
         </v-img>
+        <v-app-bar
+            flat
+            color="primary"
+            v-if="!images"
+            height="80px"
+          >
+            <v-toolbar-title class="text-h6 white--text pl-0">
+              {{ name }}
+            </v-toolbar-title>
+          </v-app-bar>
         <v-card-text class="text-justify">
           <p v-for="(obj, index) in description" :key="index+1">
             {{ obj }} 
@@ -95,6 +105,7 @@
                 v-model="optional_digit"
                 label="Число вопросов в варианте"
                 outlined
+                :disabled="!debug"
               />
             </v-row>
             <v-row>
@@ -105,6 +116,7 @@
                 max="9"
                 ticks="always"
                 tick-size="5"
+                :disabled="!debug"
               />
             </v-row>
             <v-row>
@@ -156,6 +168,8 @@
           'optional_digit':optional_digit,
           'timer': timer
         }"
+        :debug="debug"
+        :images="images"
       />
   </div>
   
@@ -167,16 +181,20 @@
   import info from '../data/info.js';
 
   export default {
-    name: 'Home',
+    name: 'ParentQuiz',
 
     components: {
       main_quiz,
+    },
+    props: {
+      debug: Boolean,
+      images: Boolean
     },
     data: () => ({
       name: info.name,
       description: info.description,
       authorizing: true,
-      debug: false,
+      // debug: false,
       group: 'ТСТ-442',
       user_name: 'Тестовый',
       user_surname: 'Вариант',
@@ -194,7 +212,8 @@
         if(input){
           return 'https://i.pinimg.com/originals/ea/94/f1/ea94f17cce722d9bc1b8643a0277da66.jpg'
         } else return 'https://cdn.culture.ru/images/56e7c169-0ced-5fa8-8764-860334000db0'
-      }
+      },
+
     }
   }
 </script>

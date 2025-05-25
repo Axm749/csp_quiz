@@ -5,10 +5,6 @@
       color="primary"
       dark
     >
-      
-      
-      
-
       <v-dialog 
         transition="slide-y-transition"  
         max-height="80%" 
@@ -39,17 +35,18 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
-        <creditsCard/>
+        <creditsCard :debug="debug"
+            :images="images"/>
       </v-dialog>
 
 
       <v-spacer></v-spacer>
 
-      <v-btn class="d-flex align-center"
+      <!-- <v-btn class="d-flex align-center"
         @click="$vuetify.theme.dark = !$vuetify.theme.dark" 
           icon>
         <v-icon>mdi-theme-light-dark</v-icon>
-      </v-btn>
+      </v-btn> -->
 
 
 
@@ -75,7 +72,7 @@
             color="primary"
           >
             
-            <v-toolbar-title>Настройка темы</v-toolbar-title>
+            <v-toolbar-title>Настройки</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn
               icon
@@ -85,29 +82,33 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
-            <themePicker class="mt-3"/>
-            
-            
-          
-          
-        <!-- </v-card> -->
-        
-        
+            <optionsPanel 
+            class="mt-3" 
+            :debug="debug"
+            :images="images"
+            @update="update"
+            />    
       </v-dialog>
-
+      
+      
 
       
     </v-app-bar>
 
     <v-main>
-      <router-view/>
+      <ParentQuiz 
+        :images="images" 
+        :debug="debug"
+      />
     </v-main>
     <v-footer padless>
         <v-card flat tile color="primary" width="100%">
           <v-divider></v-divider>
 
           <v-card-text class="white--text text-center">
-            РУТ (МИИТ) 2025 &copy;
+            РУТ (МИИТ) 2025
+            <div v-if="debug">debug: {{ debug }}</div>
+            <div v-if="images && debug">images: {{ images }}</div>
           </v-card-text>
         </v-card>
       </v-footer>
@@ -116,20 +117,32 @@
 
 <script>
 import creditsCard from './components/creditsCard.vue'
-import themePicker from './components/themePicker.vue';
+import optionsPanel from './components/optionsPanel.vue';
+import ParentQuiz from './components/parentQuiz.vue'
 
 export default {
   name: 'App',
   components:{
     creditsCard,
-    themePicker
+    optionsPanel,
+    ParentQuiz
   },
 
   data: () => ({
-    //
+    debug: false,
     dialog_credits: false,
-    dialog_options: false
+    dialog_options: false,
+    images: true
   }),
+  methods:{
+    /**
+     * 
+     * @param varName - название изменяемой переменной
+     * @param input   - значение, которое переменная должна принять
+     */
+    update(varName, input){this[`${varName}`] = input},
+
+  }
 };
 </script>
 

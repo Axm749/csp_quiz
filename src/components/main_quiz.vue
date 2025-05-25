@@ -44,6 +44,7 @@
         <v-img
             height="150px"
             :src="get_img(!$vuetify.theme.dark)"
+            v-if="images"
           >
             <v-app-bar
               flat
@@ -54,6 +55,16 @@
               </v-toolbar-title>
             </v-app-bar>
           </v-img>
+
+          <v-app-bar
+              flat
+              color="primary"
+              v-if="!images"
+            >
+              <v-toolbar-title class="text-h6 white--text pl-0">
+                Начали!
+              </v-toolbar-title>
+            </v-app-bar>
       </v-card>
       
       <v-card 
@@ -156,6 +167,7 @@
         <v-img
           height="100px"
           :src="get_img(!$vuetify.theme.dark)"
+          v-if="images"
         >
           <v-app-bar
             flat
@@ -166,6 +178,16 @@
             </v-toolbar-title>
           </v-app-bar>
         </v-img>
+        
+        <v-app-bar
+          flat
+          color="primary"
+          v-if="!images"
+        >
+          <v-toolbar-title class="text-h6 white--text pl-0">
+            Индивидуальные результаты викторины
+          </v-toolbar-title>
+        </v-app-bar>
         <v-card-text>
           <v-row>
             <v-col>
@@ -315,12 +337,14 @@ import questions from '../data/questions.js';
   export default {
     name: 'main_quiz',
     props:{
-      user: Object
+      user: Object,
+      debug: Boolean,
+      images: Boolean
     },
 
     data: () => ({
       quiz_state: true,
-      debug: true,
+      // debug: true,
       jtr: 0,
       questions_num_list: [],
       questions_ans_list: [],
@@ -336,15 +360,17 @@ import questions from '../data/questions.js';
 
       timerCount: 10,
       timerEnabled: true,
-      timerMax: 10
+      timerMax: 10,
 
     }),
     methods:{
+      
       get_seed(user){
         var seed = `${user['group']}${user['user_name']}${user['user_surname']}`
         // console.log(seed)
         return seed
       },
+
       cyrb128(str) {
         let h1 = 1779033703, h2 = 3144134277,
             h3 = 1013904242, h4 = 2773480762;
@@ -630,7 +656,7 @@ import questions from '../data/questions.js';
               correct = Number(right),
               all = Number(total);
         var score = this.calcScore(correct, all, timeLeft)
-        var maxScore = this.calcScore(all, all, timeMaxSec)
+        var maxScore = this.calcScore(all, all, timeMax)
         return `${score}/${maxScore}`
       },
       calcScore(correct, all, timeLeft){
@@ -656,7 +682,6 @@ import questions from '../data/questions.js';
       this.timerCount = this.user.timer * 2 * 60
       this.timerMax = this.user.timer * 60
       this.timerEnabled = true;
-
     },
     watch: {
 
