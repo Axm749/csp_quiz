@@ -55,7 +55,7 @@
                             Основной цвет    
                         </span>
                     </v-expansion-panel-header>
-                    <v-expansion-panel-content class="align-center text-center">
+                    <v-expansion-panel-content class="align-center text-center pt-3">
                         
                         <v-color-picker v-if="!$vuetify.theme.dark"
                         v-model="$vuetify.theme.themes.light.primary"
@@ -93,7 +93,7 @@
                             Второстепенный цвет    
                         </span>
                     </v-expansion-panel-header>
-                    <v-expansion-panel-content class="align-center text-center">
+                    <v-expansion-panel-content class="align-center text-center pt-3">
                         
                         <!-- <v-color-picker v-if="!$vuetify.theme.dark"
                         v-model="$vuetify.theme.themes.light.secondary"
@@ -131,7 +131,7 @@
                             Выбранный ответ    
                         </span>
                     </v-expansion-panel-header>
-                    <v-expansion-panel-content class="align-center text-center">
+                    <v-expansion-panel-content class="align-center text-center pt-3">
                         <v-color-picker v-if="!$vuetify.theme.dark"
                         v-model="$vuetify.theme.themes.light.answerSelected"
                         ></v-color-picker>
@@ -169,7 +169,7 @@
                             Не выбранный ответ    
                         </span>
                     </v-expansion-panel-header>
-                    <v-expansion-panel-content class="align-center text-center">
+                    <v-expansion-panel-content class="align-center text-center pt-3">
                         <v-color-picker v-if="!$vuetify.theme.dark"
                         v-model="$vuetify.theme.themes.light.passive"
                         ></v-color-picker>

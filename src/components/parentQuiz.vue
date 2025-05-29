@@ -1,15 +1,7 @@
 <template>
   <div class="app mb-3">
-    <div class="debug" v-if="debug">
+    <!-- <div class="debug" v-if="debug">
       <v-row>
-
-        <!-- <v-col>
-          <v-btn
-          @click="debug=false"
-          x-small block tile text
-          >hide_debug</v-btn>
-        </v-col>
-        <v-divider vertical/> -->
         <v-col>
           <p> 
             authorizing:
@@ -46,7 +38,7 @@
         </v-col>
 
       </v-row>
-    </div>
+    </div> -->
     <v-container v-if="authorizing">
       <v-card class="auth" elevation="10">
         <v-img
@@ -141,24 +133,21 @@
 
         </v-card-text>
       </v-card>
-      <div class="revoke" v-if="!authorizing && debug">
-        <v-row>
-          <v-col>
-            <v-btn
-            @click="authorizing=true"
-            block
-            color="primary"
-            >
-              отменить тестирование
-            </v-btn>
-          </v-col>
-        </v-row>
-      </div>
-      
-
-      
     </v-container>
-    
+
+    <!-- <div class="revoke px-3 pt-3" v-if="(!authorizing) && debug">
+      <v-row>
+        <v-col>
+          <v-btn
+          @click="authorizing=true"
+          block
+          color="primary"
+          >
+            отменить тестирование
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div> -->
     <main_quiz
         v-if="!authorizing"
         :user="{
