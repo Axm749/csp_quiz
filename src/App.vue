@@ -35,20 +35,13 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
-        <creditsCard :debug="debug"
-            :images="images"/>
+        <creditsCard 
+          :debug="debug"
+          :images="images"
+        />
       </v-dialog>
-
-
-      <v-spacer></v-spacer>
-
-      <!-- <v-btn class="d-flex align-center"
-        @click="$vuetify.theme.dark = !$vuetify.theme.dark" 
-          icon>
-        <v-icon>mdi-theme-light-dark</v-icon>
-      </v-btn> -->
-
-
+      
+      <v-spacer/>
 
       <v-dialog 
         transition="slide-y-transition"  
@@ -65,34 +58,28 @@
             <v-icon>mdi-cog</v-icon>
           </v-btn>
         </template>
-        
-        <!-- <v-card> -->
-          <v-toolbar
+      
+        <v-toolbar
+          dark
+          color="primary"
+        >
+          <v-toolbar-title>Настройки</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
             dark
-            color="primary"
+            @click="dialog_options = false"
           >
-            
-            <v-toolbar-title>Настройки</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              dark
-              @click="dialog_options = false"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
-            <optionsPanel 
-            class="mt-3" 
-            :debug="debug"
-            :images="images"
-            @update="update"
-            />    
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+          <optionsPanel 
+          class="mt-3" 
+          :debug="debug"
+          :images="images"
+          @update="update"
+          />    
       </v-dialog>
-      
-      
-
-      
     </v-app-bar>
 
     <v-main>
@@ -101,14 +88,13 @@
         :debug="debug"
       />
     </v-main>
+    
     <v-footer padless>
         <v-card flat tile color="primary" width="100%">
           <v-divider></v-divider>
 
           <v-card-text class="white--text text-center">
             РУТ (МИИТ) 2025
-            <div v-if="debug">debug: {{ debug }}</div>
-            <div v-if="images && debug">images: {{ images }}</div>
           </v-card-text>
         </v-card>
       </v-footer>

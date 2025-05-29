@@ -3,13 +3,13 @@
     <div class="debug" v-if="debug">
       <v-row>
 
-        <v-col>
+        <!-- <v-col>
           <v-btn
           @click="debug=false"
           x-small block tile text
           >hide_debug</v-btn>
         </v-col>
-        <v-divider vertical/>
+        <v-divider vertical/> -->
         <v-col>
           <p> 
             authorizing:

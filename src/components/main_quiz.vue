@@ -1,42 +1,6 @@
 <template>
   <v-container>
 
-    <div class="debug" v-if="debug">
-      <v-row>
-        <v-col>
-          <v-btn
-          @click="debug=false"
-          x-small block tile text
-          >hide_debug</v-btn>
-        </v-col>
-        <v-divider vertical/>
-        <v-col>
-          <p> 
-            quiz_state: {{ quiz_state }}
-          </p>
-        </v-col>
-        <v-divider vertical/>
-        <v-col>
-          <p> 
-            ral: {{ get_rand(get_seed(user)).length }}
-          </p>
-        </v-col>
-        <v-divider vertical/>
-        <v-col cols="4">
-          <p> 
-            qnl: {{ questions_num_list }}
-          </p>
-        </v-col>
-        <v-divider vertical/>
-        <v-col cols="4">
-          <p> 
-            qal: {{ questions_ans_list }}
-          </p>
-        </v-col>
-
-
-      </v-row>
-    </div>
     <p style="display: none;">just to render {{ jtr }}</p>
     <div class="quiz" v-if="quiz_state">
 
@@ -56,15 +20,15 @@
             </v-app-bar>
           </v-img>
 
-          <v-app-bar
-              flat
-              color="primary"
-              v-if="!images"
-            >
-              <v-toolbar-title class="text-h6 white--text pl-0">
-                Начали!
-              </v-toolbar-title>
-            </v-app-bar>
+        <v-app-bar
+            flat
+            color="primary"
+            v-if="!images"
+          >
+            <v-toolbar-title class="text-h6 white--text pl-0">
+              Начали!
+            </v-toolbar-title>
+          </v-app-bar>
       </v-card>
       
       <v-card 
@@ -86,8 +50,8 @@
         <v-spacer></v-spacer>
         <v-chip v-if="debug" color="primary">
           [debug] Q={{ obj.id }}, 
-          correct: {{ questions_ans_list[index]+1 }}, 
-          chosen: {{ (chosen_ans_list[index]+1)<5 ? (chosen_ans_list[index]+1) : 'none' }}
+          co: {{ questions_ans_list[index]+1 }}, 
+          ch: {{ (chosen_ans_list[index]+1)<5 ? (chosen_ans_list[index]+1) : 'none' }}
         </v-chip>
         
       </v-toolbar>
@@ -501,7 +465,7 @@ import questions from '../data/questions.js';
             available_slots.splice(current_ans_position, 1)
           }
           available_slots.splice(available_slots[0], 1)
-          console.log( available_slots )
+          // console.log( available_slots )
           if ((r_num_array[i]%3)>0){
             this.questions_final_list[i].answer = this.relocateInArray(
               this.questions_final_list[i].answer, 

@@ -9,6 +9,7 @@ export default new Vuetify({
         themes: {
           light: {
             primary: colors.brown.darken3,
+            // primary: colors.brown.base,
             secondary: colors.brown.base,
             accent: colors.brown.base, 
             task: colors.brown.base,
