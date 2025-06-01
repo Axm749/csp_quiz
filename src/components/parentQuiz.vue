@@ -118,7 +118,7 @@
                 block
                 color="primary"
               >
-                Начать тестирование
+                Начать испытание
               </v-btn>
 
               <v-btn
@@ -126,7 +126,7 @@
                 disabled
                 block
               >
-                Начать тестирование
+                Начать испытание
               </v-btn>
             </v-row>
           </v-col> 
@@ -159,6 +159,7 @@
         }"
         :debug="debug"
         :images="images"
+        :showAnswers="showAnswers"
       />
   </div>
   
@@ -177,6 +178,7 @@
     },
     props: {
       debug: Boolean,
+      showAnswers: Boolean,
       images: Boolean
     },
     data: () => ({

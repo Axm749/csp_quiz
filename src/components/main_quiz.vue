@@ -46,25 +46,32 @@
       >
         <v-toolbar-title class="text-body-2 ">
           вопрос №{{ index+1 }}
+          
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-chip v-if="debug" color="primary">
+        <v-chip elevation="5" v-if="debug" :color="cheated ? 'secondary' : 'primary'">
           [debug] Q={{ obj.id }}, 
           co: {{ questions_ans_list[index]+1 }}, 
           ch: {{ (chosen_ans_list[index]+1)<5 ? (chosen_ans_list[index]+1) : 'none' }}
         </v-chip>
+        <v-chip elevation="5" v-if="showAnswers" :color="cheated ? 'secondary' : 'primary'" class="ml-3" @click="cheaterNotification()">
+          {{ questions_ans_list[index]+1 }}
+          <!-- <div v-if="cheated">пойман!</div> -->
+        </v-chip>
+        
         
       </v-toolbar>
+
       <v-card-text>
         {{obj.question}}
       </v-card-text>
-
+      
       <v-card-actions>   
         <v-col>
           <v-row>
             <v-col>
               <v-btn block max-width="100%" elevation="2"
-              class="overflow-x-hidden shaded"
+              class="overflow-visible shaded"
               :dark="chosen_ans_list[index]===0"
               :color="chosen_ans_list[index]===0 ? 'answerSelected' : 'passive'"
               @click="check_answer(0, questions_ans_list[index], obj, index)">
@@ -73,7 +80,7 @@
             </v-col>
             <v-col>
               <v-btn block max-width="100%" elevation="2"
-              class="overflow-x-hidden shaded"
+              class="overflow-visible shaded"
               :dark="chosen_ans_list[index]===1"
               :color="chosen_ans_list[index]===1 ? 'answerSelected' : 'passive'"
               @click="check_answer(1, questions_ans_list[index], obj, index)">
@@ -84,7 +91,7 @@
           <v-row>
             <v-col>
               <v-btn block max-width="100%" elevation="2"
-              class="overflow-x-hidden shaded"
+              class="overflow-visible shaded"
               :dark="chosen_ans_list[index]===2"
               :color="chosen_ans_list[index]===2 ? 'answerSelected' : 'passive'"
               @click="check_answer(2, questions_ans_list[index], obj, index)">
@@ -93,7 +100,7 @@
             </v-col>
             <v-col>
               <v-btn block max-width="100%" elevation="2"
-              class="overflow-x-hidden shaded"
+              class="overflow-visible shaded"
               :dark="chosen_ans_list[index]===3"
               :color="chosen_ans_list[index]===3 ? 'answerSelected' : 'passive'"
               @click="check_answer(3, questions_ans_list[index], obj, index)">
@@ -138,7 +145,7 @@
             color="rgba(0, 0, 0, 0)"
           >
             <v-toolbar-title class="text-h6 white--text pl-0">
-              Индивидуальные результаты викторины
+              Индивидуальные результаты
             </v-toolbar-title>
           </v-app-bar>
         </v-img>
@@ -149,7 +156,7 @@
           v-if="!images"
         >
           <v-toolbar-title class="text-h6 white--text pl-0">
-            Индивидуальные результаты викторины
+            Индивидуальные результаты
           </v-toolbar-title>
         </v-app-bar>
         <v-card-text>
@@ -194,6 +201,11 @@
               </v-simple-table>
             </v-col>
           </v-row>
+
+          <v-card color="red" dark class="text-center pa-2" v-if="cheated" @click="cheaterNotification()">
+            Результат аннулирован, так как использовались настройки разработчиков
+          </v-card>
+          
           <v-row>
             <v-col class="text-center my-5">
               <p>Ответов:</p>
@@ -258,9 +270,15 @@
           </v-row>
 
 
-          <v-row v-if="debug">
-            <v-simple-table dense width="100%">
+          <div v-if="debug">
+            <p>Дебагерская таблица для показа выбранных ответов к правильным</p>
+            <v-simple-table width="100%">
               <template v-slot:default>
+                  <thead>
+                    <th>Выбранный вариант</th>
+                    <th>Верный варинат</th>
+                    <th>совпадает ли выбранный с верным</th>
+                  </thead>
                   <tbody>
                     <tr v-for="(obj, index) of chosen_ans_list.slice(0, user.optional_digit)" :key="index+1">
                       <td>
@@ -289,7 +307,7 @@
                   </tbody>
                 </template>
             </v-simple-table>
-          </v-row>          
+          </div>          
         </v-card-text>
       </v-card>
     </div>
@@ -303,11 +321,13 @@ import questions from '../data/questions.js';
     props:{
       user: Object,
       debug: Boolean,
+      showAnswers: Boolean,
       images: Boolean
     },
 
     data: () => ({
       quiz_state: true,
+      cheated: false,
       // debug: true,
       jtr: 0,
       questions_num_list: [],
@@ -328,10 +348,15 @@ import questions from '../data/questions.js';
 
     }),
     methods:{
-      
+      cheaterNotification(){
+        alert('читерить не хорошо')
+      },
       get_seed(user){
         var seed = `${user['group']}${user['user_name']}${user['user_surname']}`
         // console.log(seed)
+        if (this.showAnswers|| this.debug){
+          this.showAnswers = true
+        }
         return seed
       },
 
@@ -504,10 +529,21 @@ import questions from '../data/questions.js';
       check_answer(x, y, obj, index){
         this.chosen_ans_list[index]=x
         this.jtr++
+        // console.log(
+        //   this.showAnswers, 
+        //   this.debug,
+        //   this.cheated
+        // )
+        if (this.showAnswers || this.debug){
+          this.cheated = true
+        }
       },
 
       finish_req(){
         var ans_count = 0
+        if (this.showAnswers|| this.debug){
+          this.showAnswers = true
+        }
         for(var i=0; i<this.user.optional_digit; i++){
           if (this.chosen_ans_list[i] == 5){
             // return false
@@ -530,6 +566,9 @@ import questions from '../data/questions.js';
         this.quiz_state=false
         this.timerEnabled = false;
         this.correct_count = 0
+        if (this.showAnswers|| this.debug){
+          this.showAnswers = true
+        }
         for (var i=0; i<this.user.optional_digit; i++){
           if (this.chosen_ans_list[i]==this.questions_ans_list [i]){
             this.correct_count++
@@ -659,7 +698,7 @@ import questions from '../data/questions.js';
 
       timerCount: {
         handler(value) {
-          if (value > 0 && this.timerEnabled) {
+          if (value > 1 && this.timerEnabled) {
             setTimeout(() => {
               this.timerCount-=1;
             }, 1000);

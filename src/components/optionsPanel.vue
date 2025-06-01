@@ -56,33 +56,35 @@
                         </span>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content class="align-center text-center pt-3">
+                        <div v-if="!altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.primary"
+                            />
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.primary"
+                            />
+                        </div>
                         
-                        <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.primary"
-                        />
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.primary"
-                        />
-                        
-                        
-                        <!-- <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.primary"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        />
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.primary"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        /> -->
+                        <div v-if="altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.primary"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.primary"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                        </div>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
 
@@ -94,32 +96,34 @@
                         </span>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content class="align-center text-center pt-3">
-                        
-                        <!-- <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.secondary"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        />
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.secondary"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        /> -->
-
-                        <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.secondary"
-                        ></v-color-picker>
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.secondary"
-                        ></v-color-picker>
+                        <div v-if="altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.secondary"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.secondary"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                        </div>
+                        <div v-if="!altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.secondary"
+                            ></v-color-picker>
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.secondary"
+                            ></v-color-picker>
+                        </div>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
 
@@ -132,31 +136,35 @@
                         </span>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content class="align-center text-center pt-3">
-                        <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.answerSelected"
-                        ></v-color-picker>
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.answerSelected"
-                        ></v-color-picker>
+                        <div v-if="!altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.answerSelected"
+                            ></v-color-picker>
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.answerSelected"
+                            ></v-color-picker>
+                        </div>
 
-                        <!-- <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.answerSelected"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        />
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.answerSelected"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        /> -->
+                        <div v-if="altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.answerSelected"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.answerSelected"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                        </div>
 
                     </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -170,36 +178,107 @@
                         </span>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content class="align-center text-center pt-3">
-                        <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.passive"
-                        ></v-color-picker>
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.passive"
-                        ></v-color-picker>
+                        
+                        <div v-if="!altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.passive"
+                            ></v-color-picker>
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.passive"
+                            ></v-color-picker>
+                        </div>
+                        
+                        <div v-if="altColorPicker">
+                            <v-color-picker v-if="!$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.light.passive"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                            <v-color-picker v-if="$vuetify.theme.dark"
+                            v-model="$vuetify.theme.themes.dark.passive"
+                            hide-canvas
+                            hide-inputs
+                            hide-sliders
+                            show-swatches
+                            width="100%"
+                            swatches-max-height="350"
+                            />
+                        </div>
 
 
 
-                        <!-- <v-color-picker v-if="!$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.light.passive"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        />
-                        <v-color-picker v-if="$vuetify.theme.dark"
-                        v-model="$vuetify.theme.themes.dark.passive"
-                        hide-canvas
-                        hide-inputs
-                        hide-sliders
-                        show-swatches
-                        width="100%"
-                        swatches-max-height="350"
-                        /> -->
+                        
                     </v-expansion-panel-content>
                 </v-expansion-panel>
-                
+            </v-expansion-panels>
+            <div class="ma-3">
+                <v-btn
+                    block
+                    elevation="1"
+                    @click="returnDefaultTheme()"
+                >
+                    вернуть исходные цвета
+                </v-btn>
+                <v-checkbox
+                    label="альтернативный способ выбора цвета"
+                    v-model="altColorPicker"
+                />
+            </div>
+            
+
+            <v-divider class="my-3"/>
+
+            <v-expansion-panels flat focusable>
+                <v-expansion-panel>
+                    <v-expansion-panel-header>
+                        <span>
+                            <v-icon color="primary" small>mdi-developer-board</v-icon>
+                            для разработчиков
+                        </span>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content class="align-center text-center pt-3">
+                        <v-card color="secondary" dark>
+                            <v-card-text class="text-center">
+                                Сразу говорю, что при попытке 
+                                использовать параметры 
+                                разработчика, результат будет 
+                                аннулирован автоматически. 
+                                Предназначены лишь для тестирования 
+                                работы приложения и отлова ошибок.
+                            </v-card-text>
+                            <v-card-actions>
+                                
+                                <v-container>
+
+                                
+                                
+                                    <v-row no-gutters>
+                                        <v-col md="2">
+                                            <v-checkbox
+                                                label="debug"
+                                                v-model="debugChangable"
+                                                @change="update('debug', debugChangable)"
+                                            />
+                                        </v-col>
+                                        
+                                        
+                                        <v-col md="3">
+                                            <v-checkbox
+                                                label="showAnswers"
+                                                v-model="answersChangable"
+                                                @change="update('showAnswers', answersChangable)"
+                                            />
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card-actions>
+                        </v-card>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
             </v-expansion-panels>
 
 
@@ -211,7 +290,7 @@
   </template>
   
 <script>
-
+import colors from 'vuetify/lib/util/colors'
 export default {
     name: 'creditsCard',
     props:{
@@ -219,12 +298,36 @@ export default {
     },
     data: () => ({
         images: true,
-        debugChangable: false
+        debugChangable: false,
+        answersChangable: false,
+        altColorPicker: false
     }),
     methods: {
         update(valName, value){
             // console.log('making emit')
             this.$emit('update', valName, value)
+        },
+        returnDefaultTheme(){
+            if (!this.$vuetify.theme.dark){         
+                this.$vuetify.theme.themes.light = {
+                    primary: colors.brown.darken3,
+                    secondary: colors.brown.base,
+                    accent: colors.brown.base, 
+                    task: colors.brown.base,
+                    answerSelected: colors.brown.base,
+                    passive: colors.brown.lighten4
+                }
+            } else {
+                this.$vuetify.theme.themes.dark = {
+                    primary: colors.teal.darken3,
+                    secondary: colors.teal.base,
+                    accent: colors.teal.base,
+                    task: colors.teal.base,
+                    answerSelected: colors.teal.lighten1,
+                    passive: colors.blueGrey.base
+                }
+            }
+
         }
     }
 }

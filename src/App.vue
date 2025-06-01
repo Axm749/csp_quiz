@@ -86,6 +86,7 @@
       <ParentQuiz 
         :images="images" 
         :debug="debug"
+        :showAnswers="showAnswers"
       />
     </v-main>
     
@@ -116,6 +117,7 @@ export default {
 
   data: () => ({
     debug: false,
+    showAnswers: false,
     dialog_credits: false,
     dialog_options: false,
     images: true
