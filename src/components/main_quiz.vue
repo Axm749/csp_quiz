@@ -385,10 +385,12 @@ import questions from '../data/questions.js';
         // var max_len_log = this.user.optional_digit
         for(var j=0; j<49; j++){
           for(var i=0; i<4; i++){
-            arr.push(this.cyrb128(arr[j])[i])
+
+            arr.push(this.cyrb128(`${arr[j]}_${i*j}`)[i])
           }
         }
-        // console.log(arr)
+        console.log(arr)
+        
         // возвращаю массив из случайных чисел
         return arr
       },
